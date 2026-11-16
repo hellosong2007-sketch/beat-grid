@@ -1,0 +1,3484 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>กล่องจังหวะ</title>
+    <meta
+      name="description"
+      content="สร้างจังหวะกลองบนตาราง ฟังแล้วเรียงตาม และฝึกนับจังหวะย่อย"
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#dfe9ef" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1a21" media="(prefers-color-scheme: dark)" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200
+          %2032%2032%27%3E%3Crect%20x%3D%273%27%20y%3D%273%27%20width%3D%2711%27%20height%
+          3D%2711%27%20rx%3D%272%27%20fill%3D%27%2523c4421f%27%2F%3E%3Crect%20x%3D%2718%27
+          %20y%3D%273%27%20width%3D%2711%27%20height%3D%2711%27%20rx%3D%272%27%20fill%3D%2
+          7none%27%20stroke%3D%27%2523c4421f%27%20stroke-width%3D%273%27%2F%3E%3Crect%20x%
+          3D%273%27%20y%3D%2718%27%20width%3D%2711%27%20height%3D%2711%27%20rx%3D%272%27%2
+          0fill%3D%27none%27%20stroke%3D%27%2523c4421f%27%20stroke-width%3D%273%27%2F%3E%3
+          Crect%20x%3D%2718%27%20y%3D%2718%27%20width%3D%2711%27%20height%3D%2711%27%20rx%
+          3D%272%27%20fill%3D%27%2523c4421f%27%2F%3E%3C%2Fsvg%3E"
+    />
+    <meta property="og:title" content="กล่องจังหวะ" />
+    <meta
+      property="og:description"
+      content="สร้างจังหวะกลองบนตาราง ฟังแล้วเรียงตาม และฝึกนับจังหวะย่อย"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="th_TH" />
+    <style>
+      /* สีหลัก */
+      :root {
+        --bg: #dfe9ef; /* พื้นหลังของหน้า */
+        --surface: #ffffff; /* พื้นการ์ด */
+        --surface-2: #f3f8fa; /* พื้นช่องใส่ข้อมูลและปุ่มรอง */
+        --line: #c6d6e0; /* เส้นขอบ */
+        --line-strong: #b5c8d4; /* เส้นหนัก เช่น เส้นบรรทัดห้าเส้น */
+        --text: #17252f; /* ตัวอักษรหลัก */
+        --text-soft: #33454f; /* ตัวอักษรรอง */
+        --muted: #5f7584; /* คำอธิบายเล็ก (ใช้บนพื้นการ์ดเท่านั้น) */
+        --action: #c4421f; /* ปุ่มหลักและจุดเน้น */
+        --action-ink: #ffffff; /* ตัวอักษรบนปุ่มหลัก */
+        --action-soft: #fdece7; /* พื้นเน้นอ่อน */
+        --blue: #3f6f8d; /* สีรอง และวงโฟกัส */
+        --blue-soft: #e3eef5; /* พื้นข้อมูลอ่อน */
+        --brass: #9a6a1f; /* สีที่สาม ใช้กับเหรียญ */
+        --good: #2e7d59; /* ถูก */
+        --good-soft: #e1f2ea; /* พื้นเมื่อถูก */
+        --warn: #9a6a1f; /* ใกล้ถูก หรือควรระวัง */
+        --bad: #b3261e; /* ผิด */
+        --bad-soft: #fbe6e4; /* พื้นเมื่อผิด */
+        color-scheme: light;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --bg: #0f1a21;
+          --surface: #172630;
+          --surface-2: #1c2f3b;
+          --line: #2c4150;
+          --line-strong: #3a5263;
+          --text: #e6eef3;
+          --text-soft: #c3d3dc;
+          --muted: #8ea3b1;
+          --action: #f07a5a;
+          --action-ink: #1b0e09;
+          --action-soft: #3a221b;
+          --blue: #8cb8d3;
+          --blue-soft: #1d3442;
+          --brass: #d9a94f;
+          --good: #7fd1a6;
+          --good-soft: #1b3a2e;
+          --warn: #e3b04b;
+          --bad: #ff8a80;
+          --bad-soft: #4a2220;
+          color-scheme: dark;
+        }
+      }
+      :root[data-theme='dark'] {
+        --bg: #0f1a21;
+        --surface: #172630;
+        --surface-2: #1c2f3b;
+        --line: #2c4150;
+        --line-strong: #3a5263;
+        --text: #e6eef3;
+        --text-soft: #c3d3dc;
+        --muted: #8ea3b1;
+        --action: #f07a5a;
+        --action-ink: #1b0e09;
+        --action-soft: #3a221b;
+        --blue: #8cb8d3;
+        --blue-soft: #1d3442;
+        --brass: #d9a94f;
+        --good: #7fd1a6;
+        --good-soft: #1b3a2e;
+        --warn: #e3b04b;
+        --bad: #ff8a80;
+        --bad-soft: #4a2220;
+        color-scheme: dark;
+      }
+      /* ขนาดและระยะ */
+      :root {
+        --space-1: 4px; /* ระยะห่างเล็กที่สุด */
+        --space-2: 8px; /* ระยะห่างเล็ก */
+        --space-3: 12px; /* ระยะห่างกลาง */
+        --space-4: 16px; /* ระยะห่างมาตรฐานและขอบหน้า */
+        --space-5: 24px; /* ระยะห่างใหญ่ */
+        --space-6: 32px; /* ระยะห่างใหญ่มาก */
+        --radius-control: 12px; /* มุมปุ่มและช่องกรอก */
+        --radius-card: 18px; /* มุมการ์ด */
+        --radius-pill: 999px; /* มุมแบบแคปซูล */
+        --page-width: 592px; /* ความกว้างสูงสุดของหน้า รวมขอบ */
+        --target-min: 44px; /* ขนาดต่ำสุดของปุ่มที่ต้องแตะ */
+        --button-main: 52px; /* ความสูงปุ่มหลัก */
+        --text-small: 14.4px; /* ตัวอักษรเล็ก */
+        --text-base: 16px; /* ตัวอักษรปกติ */
+        --text-medium: 18px; /* ตัวอักษรหัวข้อย่อย */
+        --text-large: 22px; /* ตัวอักษรตัวเลข */
+        --text-title: 28px; /* ตัวอักษรหัวเรื่อง */
+        --medal-size: 32px; /* ขนาดเหรียญ */
+        --pop-distance: 12px; /* ระยะที่คะแนนลอยขึ้น */
+        --pop-duration: 200ms; /* เวลาที่คะแนนลอย */
+        --fade-duration: 200ms; /* เวลาเปลี่ยนสถานะของปุ่มและช่อง */
+        --result-step: 80ms; /* ระยะหน่วงของแต่ละบรรทัดในหน้าสรุป */
+        --font-main: 'Sarabun', 'Leelawadee UI', 'Noto Sans Thai', Thonburi, Tahoma, system-ui, sans-serif;
+        --font-mono: ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: var(--text-base) / 1.6 var(--font-main);
+      }
+      main {
+        max-width: var(--page-width);
+        margin: 0 auto;
+        padding: var(--space-5) var(--space-4);
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h1 {
+        font-size: var(--text-title);
+        line-height: 1.4;
+        text-wrap: balance;
+      }
+      h2 {
+        font-size: var(--text-medium);
+        margin: var(--space-4) 0 var(--space-2);
+        text-wrap: balance;
+      }
+      h3 {
+        font-size: var(--text-base);
+        margin: var(--space-3) 0 var(--space-1);
+      }
+      h1:focus {
+        outline: none;
+      }
+      button,
+      select {
+        font: inherit;
+        color: var(--text);
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-control);
+        min-height: var(--target-min);
+        padding: var(--space-2) var(--space-3);
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+      button:focus-visible,
+      select:focus-visible,
+      summary:focus-visible,
+      input:focus-visible,
+      [role='button']:focus-visible {
+        outline: 3px solid var(--blue);
+        outline-offset: 2px;
+      }
+      button:disabled,
+      button[aria-disabled='true'] {
+        opacity: 0.5;
+        cursor: default;
+      }
+      button.primary {
+        background: var(--action);
+        color: var(--action-ink);
+        border-color: var(--action);
+        min-height: var(--button-main);
+        font-weight: 700;
+      }
+      button:active:not(:disabled) {
+        transform: scale(0.98);
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+        margin: var(--space-4) 0;
+      }
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-card);
+        padding: var(--space-4);
+        margin-top: var(--space-4);
+      }
+      .soft {
+        color: var(--text-soft);
+      }
+      .small {
+        font-size: var(--text-small);
+      }
+      .segments {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+      }
+      .segments button[aria-pressed='true'] {
+        background: var(--surface);
+        border-color: var(--blue);
+        outline: 1px solid var(--blue);
+        font-weight: 700;
+      }
+      .choice-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-3);
+      }
+      .choice-grid button {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: start;
+        min-width: 0;
+        background: var(--surface);
+      }
+      .choice-grid button small {
+        color: var(--text-soft);
+        font-size: var(--text-small);
+        line-height: 1.5;
+      }
+      .choice-grid button[aria-pressed='true'] {
+        border-color: var(--action);
+        outline: 2px solid var(--action);
+        background: var(--action-soft);
+      }
+      .hud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2) var(--space-5);
+        align-items: flex-end;
+        margin-bottom: var(--space-3);
+      }
+      .hud strong {
+        display: block;
+        font-size: var(--text-large);
+        line-height: 1.15;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .hud-item {
+        position: relative;
+        min-width: 0;
+      }
+      .score-pop {
+        position: absolute;
+        left: 0;
+        top: -4px;
+        color: var(--good);
+        font-weight: 700;
+        pointer-events: none;
+        animation: score-pop var(--pop-duration) ease-out forwards;
+      }
+      @keyframes score-pop {
+        from {
+          transform: translateY(var(--pop-distance));
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      .medals {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-3);
+      }
+      .medals svg,
+      .badge-list svg {
+        width: var(--medal-size);
+        height: var(--medal-size);
+        color: var(--brass);
+        flex: none;
+      }
+      .medal-earned circle {
+        fill: var(--action-soft);
+      }
+      .badge-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .badge-list li {
+        display: flex;
+        gap: var(--space-3);
+        align-items: center;
+        margin-bottom: var(--space-3);
+      }
+      .steps {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .steps li {
+        display: flex;
+        gap: var(--space-3);
+        align-items: center;
+        margin-bottom: var(--space-3);
+      }
+      .steps svg {
+        width: 56px;
+        height: 56px;
+        flex: none;
+        color: var(--blue);
+      }
+      .toast {
+        position: fixed;
+        left: var(--space-4);
+        right: var(--space-4);
+        bottom: var(--space-4);
+        max-width: 360px;
+        margin: 0 auto;
+        padding: var(--space-3);
+        background: var(--blue-soft);
+        border: 1px solid var(--blue);
+        border-radius: var(--radius-control);
+        color: var(--text);
+        text-align: center;
+        z-index: 10;
+      }
+      .notice {
+        color: var(--text-soft);
+        margin-bottom: var(--space-2);
+      }
+      .notice:empty,
+      [data-slot]:empty {
+        display: none;
+      }
+      .settings {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-card);
+        padding: var(--space-4);
+        margin-top: var(--space-5);
+      }
+      .settings summary {
+        font-weight: 700;
+        cursor: pointer;
+        min-height: var(--target-min);
+        display: flex;
+        align-items: center;
+      }
+      .settings label {
+        display: block;
+        margin-top: var(--space-3);
+      }
+      .settings input[type='range'] {
+        width: 100%;
+        accent-color: var(--action);
+      }
+      .check-result {
+        margin-top: var(--space-3);
+        padding: var(--space-3);
+        background: var(--surface-2);
+        border-radius: var(--radius-control);
+      }
+      .check-result ul {
+        padding-inline-start: var(--space-5);
+        margin: var(--space-2) 0;
+      }
+      .check-result .is-pass {
+        color: var(--good);
+        font-weight: 700;
+      }
+      .check-result .is-fail {
+        color: var(--bad);
+        font-weight: 700;
+      }
+      .result-score {
+        font-size: 40px;
+        font-weight: 700;
+        line-height: 1.15;
+        font-variant-numeric: tabular-nums;
+      }
+      .result-rows > * {
+        opacity: 0;
+        transition: opacity var(--fade-duration);
+        transition-delay: calc(var(--result-step) * var(--row, 0));
+      }
+      .result-rows.is-revealed > *,
+      :root[data-reduce='true'] .result-rows > * {
+        opacity: 1;
+      }
+      .stat-line {
+        margin: var(--space-1) 0;
+      }
+      .new-best {
+        color: var(--good);
+        font-weight: 700;
+      }
+      footer {
+        margin-top: var(--space-5);
+        color: var(--text-soft);
+        font-size: var(--text-small);
+      }
+      .sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+      }
+      progress {
+        width: 100%;
+        accent-color: var(--action);
+      }
+      :root[data-reduce='true'] *,
+      :root[data-reduce='true'] *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+        .result-rows > * {
+          opacity: 1;
+        }
+      }
+      /* สีของเกม */
+      :root {
+        --track-hat: #b45309; /* สีของแถวไฮแฮต */
+        --track-snare: #2563a8; /* สีของแถวสแนร์ */
+        --track-wood: #2e7d59; /* สีของแถวเคาะไม้ */
+        --track-kick: #c4421f; /* สีของแถวกลองใหญ่ */
+        --track-ink: #ffffff; /* สีจุดและตัวอักษรบนช่องที่มีเสียง */
+        --cell-empty: var(--surface-2); /* พื้นช่องว่าง */
+        --cell-line: var(--line-strong); /* เส้นขอบช่อง */
+        --playhead: var(--blue); /* สีกรอบของช่องที่กำลังเล่น */
+        --beat-line: var(--text-soft); /* เส้นคั่นต้นจังหวะ */
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --track-hat: #e3b04b;
+          --track-snare: #8cb8d3;
+          --track-wood: #7fd1a6;
+          --track-kick: #f07a5a;
+          --track-ink: #0f1a21;
+        }
+      }
+      :root[data-theme='dark'] {
+        --track-hat: #e3b04b;
+        --track-snare: #8cb8d3;
+        --track-wood: #7fd1a6;
+        --track-kick: #f07a5a;
+        --track-ink: #0f1a21;
+      }
+      /* ขนาดและระยะ */
+      :root {
+        --cell-min: 44px; /* ความสูงและกว้างต่ำสุดของช่อง */
+        --label-col: 40px; /* ความกว้างคอลัมน์ป้ายช่อง (จอแคบ) */
+        --head-col: 96px; /* ความกว้างคอลัมน์ชื่อแถวเสียง (จอกว้าง) */
+        --beat-gap: 8px; /* ช่องว่างก่อนต้นจังหวะ */
+        --grid-gap: 4px; /* ระยะห่างระหว่างช่อง */
+        --transport-gap: 8px; /* ระยะห่างของปุ่มในแถบควบคุมด้านล่าง */
+      }
+      .grid-wrap {
+        margin-top: var(--space-3);
+      }
+      .grid {
+        display: grid;
+        gap: var(--grid-gap);
+        grid-template-columns: var(--label-col) repeat(var(--tracks), minmax(0, 1fr));
+        grid-auto-rows: minmax(var(--cell-min), auto);
+        position: relative;
+      }
+      .grid-corner {
+        grid-row: 1;
+        grid-column: 1;
+      }
+      .track-head {
+        grid-row: 1;
+        grid-column: calc(var(--t) + 2);
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background: var(--bg);
+        border-bottom: 4px solid var(--track-color);
+        font-size: var(--text-small);
+        font-weight: 700;
+        line-height: 1.3;
+        padding: var(--space-1);
+        min-height: var(--cell-min);
+      }
+      .step-label {
+        grid-row: calc(var(--s) + 2);
+        grid-column: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-soft);
+        font-size: var(--text-small);
+      }
+      .step-label.is-beat {
+        font-weight: 700;
+        color: var(--text);
+        font-size: var(--text-base);
+      }
+      .step-label.is-now {
+        background: var(--blue-soft);
+        border-radius: 8px;
+      }
+      .cell {
+        grid-row: calc(var(--s) + 2);
+        grid-column: calc(var(--t) + 2);
+        min-height: var(--cell-min);
+        min-width: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--cell-empty);
+        border: 1px solid var(--cell-line);
+        border-radius: 8px;
+        font-size: var(--text-small);
+        font-weight: 700;
+        line-height: 1;
+      }
+      .step-label.is-beat,
+      .cell.is-beat {
+        margin-block-start: var(--beat-gap);
+      }
+      .cell-mark {
+        pointer-events: none;
+      }
+      .cell.is-on {
+        background: var(--track-color);
+        border-color: var(--track-color);
+        color: var(--track-ink);
+      }
+      .cell.is-now {
+        outline: 3px solid var(--playhead);
+        outline-offset: -2px;
+      }
+      .cell.is-on.is-hit {
+        box-shadow: inset 0 0 0 4px var(--surface);
+      }
+      .cell.is-extra {
+        border: 3px dashed var(--bad);
+      }
+      .cell.is-missing {
+        border: 3px dotted var(--good);
+        background: var(--good-soft);
+        color: var(--text);
+      }
+      .round-check {
+        margin-top: var(--space-2);
+        font-weight: 700;
+      }
+      .round-check:not(:empty) {
+        background: var(--surface);
+        border-radius: var(--radius-control);
+        border-inline-start: 6px solid var(--line-strong);
+        padding: var(--space-2) var(--space-3);
+      }
+      .round-check.is-pass {
+        color: var(--good);
+        border-inline-start-color: var(--good);
+      }
+      .round-check.is-fail {
+        color: var(--bad);
+        border-inline-start-color: var(--bad);
+      }
+      .panel .row-line {
+        margin: var(--space-1) 0;
+      }
+      .panel select {
+        display: block;
+        width: 100%;
+        margin-top: var(--space-1);
+      }
+      .transport {
+        position: sticky;
+        bottom: 0;
+        z-index: 5;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--transport-gap);
+        margin: var(--space-4) calc(-1 * var(--space-4)) 0;
+        padding: var(--space-3) var(--space-4);
+        background: var(--surface);
+        border-top: 1px solid var(--line);
+      }
+      .transport .tempo {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 160px;
+        min-width: 140px;
+        font-size: var(--text-small);
+      }
+      .transport .tempo input {
+        width: 100%;
+        accent-color: var(--action);
+      }
+      .result-groove-list {
+        list-style: none;
+        padding: 0;
+        margin: var(--space-2) 0;
+      }
+      .result-groove-list li {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--space-2) var(--space-3);
+        margin-bottom: var(--space-2);
+      }
+      @media (min-width: 720px) {
+        :root {
+          --page-width: 960px;
+        }
+        .grid {
+          grid-template-columns: var(--head-col) repeat(var(--steps), minmax(0, 1fr));
+        }
+        .track-head {
+          grid-row: calc(var(--t) + 2);
+          grid-column: 1;
+          position: static;
+          border-bottom: 0;
+          border-inline-end: 4px solid var(--track-color);
+          justify-content: flex-start;
+        }
+        .step-label {
+          grid-row: 1;
+          grid-column: calc(var(--s) + 2);
+        }
+        .cell {
+          grid-row: calc(var(--t) + 2);
+          grid-column: calc(var(--s) + 2);
+          min-width: var(--cell-min);
+        }
+        .step-label.is-beat,
+        .cell.is-beat {
+          margin-block-start: 0;
+          margin-inline-start: var(--beat-gap);
+        }
+        .transport {
+          margin-inline: 0;
+          border: 1px solid var(--line);
+          border-radius: var(--radius-card);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p id="notice" class="notice" role="status"></p>
+      <section data-screen="home">
+        <header>
+          <h1 tabindex="-1" data-t="title"></h1>
+          <p class="soft" data-t="homePitch"></p>
+        </header>
+        <h2 data-t="pickMode"></h2>
+        <div id="modes" class="choice-grid"></div>
+        <p id="earNotice" class="notice" role="status"></p>
+        <div id="slotHome" data-slot="home"></div>
+        <div id="levelBlock">
+          <h2 data-t="pickLevel"></h2>
+          <div id="levels" class="segments"></div>
+        </div>
+        <p id="homeBest" class="soft"></p>
+        <p id="solvedLine" class="soft"></p>
+        <div class="actions">
+          <button id="startPlay" class="primary" data-t="btnPlay"></button>
+          <button id="openHowto" data-t="btnHowto"></button>
+          <button id="openBadges" data-t="badgesTitle"></button>
+        </div>
+        <div id="homeBadges" class="medals"></div>
+        <details class="settings" id="settings">
+          <summary data-t="settings"></summary>
+
+          <label for="volume" data-t="volume"></label>
+          <input type="range" id="volume" min="0" max="100" value="25" />
+          <div class="actions">
+            <button id="testSound" data-t="btnTestSound"></button>
+          </div>
+          <label for="theme" data-t="themeLabel"></label>
+          <select id="theme">
+            <option value="auto" data-t="themeAuto"></option>
+            <option value="light" data-t="themeLight"></option>
+            <option value="dark" data-t="themeDark"></option>
+          </select>
+          <label><input id="reduce" type="checkbox" /> <span data-t="reduceMotion"></span></label>
+          <div class="actions">
+            <button id="clearData" data-t="btnClearData"></button>
+            <button id="check" data-t="btnSelfCheck"></button>
+          </div>
+          <div id="checkResult" class="check-result" hidden></div>
+        </details>
+      </section>
+      <section data-screen="play" hidden>
+        <h1 id="playTitle" tabindex="-1"></h1>
+        <div id="hud" class="hud">
+          <div class="hud-item" id="hudScoreBox">
+            <span class="small soft" data-t="hudScore"></span>
+            <strong id="hudScore">0</strong>
+          </div>
+          <div class="hud-item">
+            <span class="small soft">&nbsp;</span>
+            <strong id="hudStreak"></strong>
+          </div>
+          <div class="hud-item">
+            <span class="small soft">&nbsp;</span>
+            <strong id="hudRound"></strong>
+          </div>
+          <div id="slotHud" data-slot="hud"></div>
+        </div>
+        <div id="freeControls" class="panel">
+          <h3 data-t="meterLabel"></h3>
+          <div id="metres" class="segments"></div>
+          <label for="presets" data-t="presetLabel"></label>
+          <select id="presets"></select>
+          <p id="presetAbout" class="soft small"></p>
+          <div class="actions">
+            <button id="clearBtn" data-t="btnClear"></button>
+          </div>
+        </div>
+        <div id="countingCard" class="panel" hidden>
+          <h3 data-t="countingTitle"></h3>
+          <div id="countingLines"></div>
+        </div>
+        <p id="roundCheck" class="round-check" role="status"></p>
+        <div class="grid-wrap">
+          <div id="grid" class="grid" role="group" data-t-aria="title"></div>
+        </div>
+        <div id="grooveCard" class="panel" hidden>
+          <h2 id="grooveName"></h2>
+          <p id="grooveAbout"></p>
+          <p id="grooveBeats" class="soft small"></p>
+          <div id="grooveLines"></div>
+        </div>
+        <div id="countingStrip" class="panel">
+          <h3 data-t="countingTitle"></h3>
+          <div id="stripLines"></div>
+        </div>
+        <div id="slotPanel" data-slot="panel"></div>
+        <div id="transport" class="transport">
+          <button id="playMine" class="primary"></button>
+          <button id="playTarget" data-t="btnPlayTarget" hidden></button>
+          <button id="checkBtn" data-t="btnCheck" hidden></button>
+          <button id="revealBtn" data-t="btnReveal" hidden></button>
+          <button id="nextBtn" class="primary" data-t="btnNext" hidden></button>
+          <button id="quitBtn" data-t="btnQuit"></button>
+          <label class="tempo" id="tempoBox">
+            <span id="tempoText"></span>
+            <input type="range" id="tempo" />
+          </label>
+          <div id="slotActions" data-slot="actions"></div>
+        </div>
+      </section>
+      <section data-screen="result" hidden>
+        <h1 id="resultHeading" tabindex="-1"></h1>
+        <div id="resultBody" class="panel result-rows"></div>
+        <div id="slotResult" data-slot="result"></div>
+        <div class="actions">
+          <button id="againBtn" class="primary" data-t="btnAgain"></button>
+          <button id="homeBtn" data-t="btnHome"></button>
+        </div>
+      </section>
+      <section data-screen="howto" hidden>
+        <h1 tabindex="-1" data-t="btnHowto"></h1>
+        <ol id="instructions" class="steps"></ol>
+        <button id="closeHowto" class="primary" data-t="backHome"></button>
+      </section>
+      <section data-screen="badges" hidden>
+        <h1 tabindex="-1" data-t="badgesTitle"></h1>
+        <ul id="badgeList" class="badge-list"></ul>
+        <button id="closeBadges" data-t="backHome"></button>
+      </section>
+
+      <p id="toast" class="toast" role="status" aria-live="polite" hidden></p>
+      <footer data-t="footer"></footer>
+    </main>
+    <script>
+      (function () {
+        'use strict';
+        /* ═══════════ โซน A · ข้อมูล (แก้ได้) ═══════════ */
+        /* แถวเสียง: id = รหัส, label = ชื่อบนหน้าจอ,
+           kind = วิธีสร้างเสียง ('kick' เสียงทุ้มไหลลง | 'noise' เสียงซ่า | 'tone' เสียงเคาะ),
+           hz = ความถี่เริ่มต้น, endHz = ความถี่ปลาย (เฉพาะ kick), filterHz = ความถี่ตัวกรอง (เฉพาะ noise),
+           toneHz = เสียงตัวกลองที่ผสมเพิ่ม (ใส่หรือไม่ใส่ก็ได้), decaySec = เสียงค้างนานกี่วินาที,
+           colorVar = ชื่อตัวแปรสีของแถวนี้ใน CSS
+           (เพิ่มแถวที่ห้าได้ด้วยการเพิ่มหนึ่งบรรทัดที่นี่ และเพิ่มตัวแปรสีใน <style>) */
+        var TRACKS = [
+          { id: 'hat', label: 'ไฮแฮต', kind: 'noise', filterHz: 7000, decaySec: 0.05, colorVar: '--track-hat' },
+          {
+            id: 'snare',
+            label: 'สแนร์',
+            kind: 'noise',
+            filterHz: 1800,
+            toneHz: 190,
+            decaySec: 0.16,
+            colorVar: '--track-snare'
+          },
+          { id: 'wood', label: 'เคาะไม้', kind: 'tone', hz: 880, decaySec: 0.06, colorVar: '--track-wood' },
+          { id: 'kick', label: 'กลองใหญ่', kind: 'kick', hz: 150, endHz: 50, decaySec: 0.22, colorVar: '--track-kick' }
+        ];
+
+        /* จังหวะตัวอย่างและโจทย์: id = รหัส, name = ชื่อ, about = หนึ่งประโยคบอกว่าอะไรทำให้เป็นจังหวะนี้,
+           beats = จำนวนจังหวะต่อห้อง (3 หรือ 4), bpm = จังหวะต่อนาที, level = ระดับ 1-3,
+           rows = แถวเสียงที่ใช้ แต่ละแถวเขียนเป็นข้อความ x = มีเสียง . = ว่าง ความยาวเท่ากับ beats × 4
+           (เพิ่มจังหวะได้ด้วยการเพิ่มหนึ่งบล็อก แถวที่ไม่เขียนคือว่าง) */
+        var GROOVES = [
+          {
+            id: 'pulse',
+            name: 'ชีพจร',
+            about: 'กลองใหญ่ลงทุกจังหวะ เป็นพื้นของเพลงเต้นรำ',
+            beats: 4,
+            bpm: 100,
+            level: 1,
+            rows: { kick: 'x...x...x...x...' }
+          },
+          {
+            id: 'backbeat',
+            name: 'แบ็กบีต',
+            about: 'กลองใหญ่ลงจังหวะ 1 กับ 3 สแนร์ตอบที่จังหวะ 2 กับ 4',
+            beats: 4,
+            bpm: 96,
+            level: 1,
+            rows: { kick: 'x.......x.......', snare: '....x.......x...' }
+          },
+          {
+            id: 'eighths',
+            name: 'เขบ็ตหนึ่งชั้น',
+            about: 'ไฮแฮตแบ่งแต่ละจังหวะเป็นสองส่วนเท่ากัน',
+            beats: 4,
+            bpm: 96,
+            level: 1,
+            rows: { kick: 'x.......x.......', hat: 'x.x.x.x.x.x.x.x.' }
+          },
+          {
+            id: 'offbeat',
+            name: 'จังหวะยก',
+            about: 'ไฮแฮตลงเฉพาะครึ่งหลังของแต่ละจังหวะ',
+            beats: 4,
+            bpm: 104,
+            level: 1,
+            rows: { kick: 'x...x...x...x...', hat: '..x...x...x...x.' }
+          },
+          {
+            id: 'waltz',
+            name: 'วอลทซ์',
+            about: 'สามจังหวะต่อห้อง หนักที่จังหวะแรก เบาสองจังหวะหลัง',
+            beats: 3,
+            bpm: 120,
+            level: 1,
+            rows: { kick: 'x...........', snare: '....x...x...' }
+          },
+          {
+            id: 'rock',
+            name: 'ร็อกพื้นฐาน',
+            about: 'แบ็กบีตกับไฮแฮตเขบ็ตหนึ่งชั้น จังหวะที่ได้ยินบ่อยที่สุด',
+            beats: 4,
+            bpm: 100,
+            level: 2,
+            rows: { kick: 'x.......x.......', snare: '....x.......x...', hat: 'x.x.x.x.x.x.x.x.' }
+          },
+          {
+            id: 'disco',
+            name: 'ดิสโก้',
+            about: 'กลองใหญ่ลงทุกจังหวะ ไฮแฮตลงจังหวะยก',
+            beats: 4,
+            bpm: 116,
+            level: 2,
+            rows: { kick: 'x...x...x...x...', snare: '....x.......x...', hat: '..x...x...x...x.' }
+          },
+          {
+            id: 'pop',
+            name: 'ป็อป',
+            about: 'เหมือนร็อกพื้นฐาน แต่กลองใหญ่เพิ่มอีกครั้งที่ครึ่งหลังของจังหวะ 3',
+            beats: 4,
+            bpm: 92,
+            level: 2,
+            rows: { kick: 'x.......x.x.....', snare: '....x.......x...', hat: 'x.x.x.x.x.x.x.x.' }
+          },
+          {
+            id: 'halftime',
+            name: 'ฮาล์ฟไทม์',
+            about: 'สแนร์ลงครั้งเดียวที่จังหวะ 3 ทำให้รู้สึกช้าลงครึ่งหนึ่ง',
+            beats: 4,
+            bpm: 80,
+            level: 2,
+            rows: { kick: 'x.........x.....', snare: '........x.......', hat: 'x.x.x.x.x.x.x.x.' }
+          },
+          {
+            id: 'waltzHat',
+            name: 'วอลทซ์เดินไฮแฮต',
+            about: 'วอลทซ์ที่มีไฮแฮตเดินเขบ็ตหนึ่งชั้นตลอดห้อง',
+            beats: 3,
+            bpm: 120,
+            level: 2,
+            rows: { kick: 'x...........', snare: '....x...x...', hat: 'x.x.x.x.x.x.' }
+          },
+          {
+            id: 'rock2',
+            name: 'ร็อกขยับกลองใหญ่',
+            about: 'กลองใหญ่ลงก่อนจังหวะ 3 ครึ่งจังหวะ ทำให้จังหวะขยับไปข้างหน้า',
+            beats: 4,
+            bpm: 100,
+            level: 3,
+            rows: { kick: 'x.....x.x.......', snare: '....x.......x...', hat: 'x.x.x.x.x.x.x.x.' }
+          },
+          {
+            id: 'sixteen',
+            name: 'ไฮแฮตสิบหก',
+            about: 'ไฮแฮตแบ่งแต่ละจังหวะเป็นสี่ส่วน',
+            beats: 4,
+            bpm: 84,
+            level: 3,
+            rows: { kick: 'x.......x.......', snare: '....x.......x...', hat: 'xxxxxxxxxxxxxxxx' }
+          },
+          {
+            id: 'reggae',
+            name: 'เร็กเก วันดร็อป',
+            about: 'จังหวะ 1 เว้นว่าง กลองใหญ่กับสแนร์ลงพร้อมกันที่จังหวะ 3',
+            beats: 4,
+            bpm: 76,
+            level: 3,
+            rows: { kick: '........x.......', snare: '........x.......', hat: 'x.x.x.x.x.x.x.x.' }
+          },
+          {
+            id: 'bossa',
+            name: 'บอสซาโนวา',
+            about: 'เคาะไม้เล่นรูปแบบห้าครั้งที่ไม่ลงตรงจังหวะทุกครั้ง',
+            beats: 4,
+            bpm: 72,
+            level: 3,
+            rows: { kick: 'x.....x.x.....x.', wood: 'x..x..x...x..x..', hat: 'x.x.x.x.x.x.x.x.' }
+          },
+          {
+            id: 'funk',
+            name: 'ฟังก์',
+            about: 'กลองใหญ่ลงนอกจังหวะหลัก สแนร์ยังอยู่ที่ 2 กับ 4',
+            beats: 4,
+            bpm: 92,
+            level: 3,
+            rows: { kick: 'x..x......x.....', snare: '....x.......x...', hat: 'x.x.x.x.x.x.x.x.' }
+          }
+        ];
+
+        /* ระดับ: id = รหัส, label = ชื่อ, grooveLevels = ระดับของจังหวะที่ใช้ออกโจทย์ */
+        var LEVELS = [
+          { id: 'easy', label: 'ง่าย', grooveLevels: [1] },
+          { id: 'medium', label: 'กลาง', grooveLevels: [1, 2] },
+          { id: 'hard', label: 'ยาก', grooveLevels: [2, 3] }
+        ];
+
+        /* โหมดเล่น: id = รหัส, label = ชื่อ, about = คำอธิบายหนึ่งประโยค,
+           needsSound = จำเป็นต้องได้ยินเสียงหรือไม่ (ถ้าเครื่องเล่นเสียงไม่ได้ โหมดนี้จะปิดไว้) */
+        var MODES = [
+          { id: 'free', label: 'สร้างเอง', about: 'วางจังหวะของตัวเอง แล้วกดฟัง', needsSound: false },
+          { id: 'copy', label: 'ฟังแล้วเรียง', about: 'ฟังจังหวะโจทย์ แล้ววางให้เหมือน', needsSound: true },
+          { id: 'read', label: 'อ่านแล้วเรียง', about: 'อ่านวิธีนับ แล้ววางลงตารางโดยยังไม่ได้ฟัง', needsSound: false }
+        ];
+
+        /* ส่วนท้ายของวิธีนับ: คำต่อท้ายของช่องย่อยทั้งสี่ในหนึ่งจังหวะ (ช่องที่ 0 อ่านเป็นเลขจังหวะเฉย ๆ) */
+        var COUNT_SYLLABLES = ['', 'อี', 'และ', 'อะ'];
+
+        /* เหรียญ: id = รหัส, name = ชื่อ, hint = วิธีได้, test = ชื่อกฎใน Core.badgeRules,
+           value = ตัวเลขหรือชื่อที่กฎใช้เทียบ (เพิ่มเหรียญได้ด้วยการเพิ่มหนึ่งบล็อกที่ใช้กฎเดิมแต่เปลี่ยนค่า) */
+        var BADGES = [
+          { id: 'firstGroove', name: 'มือใหม่หัดตี', hint: 'เรียงจังหวะถูกครั้งแรก', test: 'solvedAtLeast', value: 1 },
+          { id: 'firstTry', name: 'แม่นตั้งแต่แรก', hint: 'ถูกทุกข้อในการตรวจครั้งแรก', test: 'allFirstTry', value: 1 },
+          { id: 'reader', name: 'อ่านออก', hint: 'จบโหมดอ่านแล้วเรียงโดยไม่ดูเฉลย', test: 'cleanMode', value: 'read' },
+          {
+            id: 'drumEar',
+            name: 'หูกลอง',
+            hint: 'จบโหมดฟังแล้วเรียงระดับยากโดยไม่ดูเฉลย',
+            test: 'cleanHard',
+            value: 'copy'
+          },
+          {
+            id: 'waltzer',
+            name: 'สามจังหวะ',
+            hint: 'เรียงจังหวะสามจังหวะต่อห้องได้ถูก',
+            test: 'solvedBeats',
+            value: 3
+          },
+          { id: 'collector', name: 'ครบชุด', hint: 'เรียงถูกครบทุกจังหวะ', test: 'solvedAll', value: 1 },
+          {
+            id: 'composer',
+            name: 'นักแต่งจังหวะ',
+            hint: 'เล่นจังหวะที่สร้างเองโดยใช้ 3 แถวเสียงขึ้นไป',
+            test: 'freeTracksAtLeast',
+            value: 3
+          }
+        ];
+
+        /* ข้อความทั้งหมดที่ผู้เล่นเห็น (ภาษาไทย) แก้คำได้ที่นี่โดยไม่ต้องแตะส่วนอื่น
+           {ชื่อ} ในข้อความคือช่องที่โปรแกรมเติมค่าให้ */
+        var TEXT = {
+          title: 'กล่องจังหวะ',
+          homePitch: 'วางจังหวะลงตาราง ฟัง นับ แล้วเรียงให้ตรงกับโจทย์',
+          solvedLine: 'เรียงได้แล้ว {n} จาก {m} จังหวะ',
+          btnPlayMine: 'ฟังของฉัน',
+          btnStop: 'หยุด',
+          btnPlayTarget: 'ฟังโจทย์',
+          btnCheck: 'ตรวจ',
+          btnReveal: 'ดูเฉลย',
+          btnRevealConfirm: 'กดอีกครั้งเพื่อดูเฉลย ข้อนี้จะได้ 0 คะแนน',
+          btnClear: 'ล้างตาราง',
+          btnClearConfirm: 'กดอีกครั้งเพื่อล้างตาราง',
+          tempoLabel: 'ความเร็ว {bpm} จังหวะต่อนาที',
+          meterLabel: 'อัตราจังหวะ',
+          presetLabel: 'ลองจังหวะตัวอย่าง',
+          countingTitle: 'วิธีนับ',
+          countingEmpty: 'ยังไม่มีจังหวะ แตะช่องในตารางเพื่อเริ่ม',
+          roundLabel: 'ข้อ {i} จาก {n}',
+          checkResult: 'ยังไม่ตรง: เกินมา {extra} ช่อง ขาดไป {missing} ช่อง',
+          checkPerfect: 'ตรงกับโจทย์',
+          markExtra: 'เกิน',
+          markMissing: 'ขาด',
+          grooveCardTitle: 'จังหวะนี้คือ {name}',
+          statFirstTry: 'ถูกในการตรวจครั้งแรก {n} ข้อ',
+          statChecks: 'ตรวจทั้งหมด {n} ครั้ง',
+          statRevealed: 'ดูเฉลย {n} ข้อ',
+          grooveListTitle: 'จังหวะในรอบนี้',
+          rowFirstTry: 'ถูกครั้งแรก',
+          rowAfterChecks: 'ถูกหลังตรวจ {n} ครั้ง',
+          rowRevealed: 'ดูเฉลย',
+          btnRetryFree: 'ลองอีกครั้งในโหมดสร้างเอง',
+          cellLabel: '{track} ช่อง {count} {state}',
+          cellOn: 'มีเสียง',
+          cellOff: 'ว่าง',
+          howto1: 'แต่ละแถวคือเสียงกลองหนึ่งชนิด แต่ละช่องคือหนึ่งในสี่ของจังหวะ',
+          howto2: 'แตะช่องเพื่อวางหรือเอาเสียงออก แล้วกดฟัง',
+          howto3: 'ในโหมดโจทย์ ฟังหรืออ่านวิธีนับ แล้ววางให้ตรง จากนั้นกดตรวจ',
+          howto4: 'ตรวจผ่านในครั้งแรกติดกันหลายข้อ จะได้คะแนนพิเศษ',
+          footer: 'กล่องจังหวะ · สร้างด้วย AI ช่วย · วิชา 3500230',
+          /* ข้อความที่เพิ่มเองสำหรับเกมนี้ (ระบุไว้ใน handoff.md) */
+          resultCopy: 'ครบทุกข้อแล้ว',
+          statStars: 'ผลที่ได้: {stars}',
+          grooveBeatsLine: '{beats} จังหวะต่อห้อง · {bpm} จังหวะต่อนาที',
+          grooveSkipped: 'ข้ามจังหวะ {id}: {problem}',
+          grooveUnknownTrack: 'ไม่รู้จักแถวเสียง {id}',
+          grooveBadLength: 'แถว {id} ยาว {n} ช่อง ควรเป็น {m}',
+          grooveBadChar: 'แถว {id} มีตัวอักษรที่ไม่ใช่ x หรือ .',
+          grooveBadBeats: 'จำนวนจังหวะต่อห้องต้องเป็น 3 หรือ 4',
+          grooveNoHit: 'ไม่มีเสียงเลยสักช่อง',
+          cntTracks: 'แถวเสียง {n}',
+          cntGrooves: 'จังหวะ {n}',
+          cntModes: 'โหมด {n}',
+          cntBadges: 'เหรียญ {n}',
+          cntScreens: 'หน้า {n}',
+          metre34: '3/4',
+          metre44: '4/4',
+          /* ข้อความกลางที่ทุกเกมใช้ร่วมกัน */
+          btnPlay: 'เริ่มเล่น',
+          btnHowto: 'วิธีเล่น',
+          btnClose: 'ปิด',
+          pickMode: 'เลือกโหมด',
+          pickLevel: 'ระดับ',
+          levelEasy: 'ง่าย',
+          levelMedium: 'กลาง',
+          levelHard: 'ยาก',
+          hudScore: 'คะแนน',
+          hudStreak: 'ต่อเนื่อง ×{n}',
+          hudTime: 'เวลา',
+          btnNext: 'ต่อไป',
+          btnQuit: 'ออก',
+          btnQuitConfirm: 'กดอีกครั้งเพื่อออก',
+          btnAgain: 'เล่นอีกครั้ง',
+          btnHome: 'กลับหน้าแรก',
+          bestLine: 'ดีที่สุดที่เคยทำได้ {value}',
+          bestNone: 'ยังไม่มีสถิติ ลองเล่นรอบแรกเลย',
+          newBest: 'สถิติใหม่ของโหมดนี้',
+          stars3: 'ยอดเยี่ยม 3 ดาว',
+          stars2: 'ดีมาก 2 ดาว',
+          stars1: 'ผ่านแล้ว 1 ดาว',
+          badgesTitle: 'เหรียญของฉัน',
+          badgeToast: 'ได้เหรียญ "{name}"',
+          audioNeeded: 'โหมดนี้ต้องใช้เสียง เครื่องนี้ยังเล่นเสียงไม่ได้ ลองโหมดอื่นก่อน',
+          settings: 'ตั้งค่า',
+          volume: 'ระดับเสียง',
+          btnTestSound: 'ทดสอบเสียง',
+          themeLabel: 'ธีม',
+          themeAuto: 'อัตโนมัติ',
+          themeLight: 'สว่าง',
+          themeDark: 'มืด',
+          reduceMotion: 'ลดการเคลื่อนไหว',
+          btnClearData: 'ล้างข้อมูลของเกมนี้',
+          btnClearDataConfirm: 'กดอีกครั้งเพื่อล้างข้อมูล',
+          btnSelfCheck: 'ตรวจระบบ',
+          selfCheckPass: 'ผ่าน {n} จาก {m} ข้อ',
+          selfCheckFail: 'ไม่ผ่าน {k} ข้อ',
+          markPass: 'ผ่าน',
+          markFail: 'ไม่ผ่าน',
+          storageNotice: 'เบราว์เซอร์นี้เก็บสถิติไม่ได้ เกมยังเล่นได้ตามปกติ',
+          /* ข้อความที่เพิ่มเองนอกตารางข้อความกลาง (ระบุไว้ใน handoff.md) */
+          badgeHad: 'ได้แล้ว',
+          badgeNot: 'ยังไม่ได้',
+          badgeAllDone: 'ได้เหรียญใหม่ {n} เหรียญ',
+          extensionLine: 'ส่วนเสริม: {error}',
+          backHome: 'ไปหน้าแรก',
+          storageOk: 'บันทึกได้',
+          storageBlocked: 'บันทึกไม่ได้',
+        };
+        /* ═══════════ โซน B · ตั้งค่า (แก้ได้) ═══════════ */
+        /* ตัวเลขที่ปรับได้ของเกม ชื่อทุกตัวบอกหน่วยไว้ท้ายชื่อ (Ms = มิลลิวินาที, Bpm = จังหวะต่อนาที) */
+        var CONFIG = {
+          /* ค่ากลางที่ทุกเกมใช้ร่วมกัน */
+          masterGain: 0.2, // ระดับเสียงรวมของเครื่องเสียง (ก่อนคูณระดับเสียงจากแถบเลื่อน)
+          defaultVolumePercent: 25, // ระดับเสียงเริ่มต้น (0-100)
+          audioAttackSec: 0.01, // เวลาไล่เสียงขึ้นของแต่ละตัว (วินาที)
+          audioReleaseSec: 0.02, // เวลาไล่เสียงลงของแต่ละตัว (วินาที)
+          toastMs: 2500, // เวลาที่ข้อความสั้น ๆ แสดงอยู่ (มิลลิวินาที)
+          confirmMs: 3000, // เวลาที่ปุ่มยืนยันสองขั้นรออยู่ (มิลลิวินาที)
+          popMs: 600, // เวลาก่อนลบตัวเลขคะแนนที่ลอยขึ้น (มิลลิวินาที)
+          countUpMs: 600, // เวลานับคะแนนขึ้นในหน้าสรุป (มิลลิวินาที)
+          seed: 0, // เมล็ดของตัวสุ่ม (0 = สุ่มใหม่ทุกครั้ง ใส่เลขอื่นเพื่อให้ได้โจทย์ชุดเดิมซ้ำ)
+          stepsPerBeat: 4, // จำนวนช่องในหนึ่งจังหวะ
+          bpmMin: 60, // ความเร็วต่ำสุดของแถบเลื่อน (จังหวะต่อนาที)
+          bpmMax: 160, // ความเร็วสูงสุดของแถบเลื่อน (จังหวะต่อนาที)
+          bpmStep: 2, // ขั้นของแถบเลื่อนความเร็ว (จังหวะต่อนาที)
+          bpmDefault: 96, // ความเร็วของตารางว่างในโหมดสร้างเอง (จังหวะต่อนาที)
+          lookaheadMs: 100, // ตั้งเสียงล่วงหน้ากี่มิลลิวินาที
+          maxLateMs: 400, // ถ้าหน้าจอค้างเกินเวลานี้ ช่องที่เลยเวลาไปแล้วจะถูกข้าม (มิลลิวินาที)
+          hitFlashMs: 120, // เวลาที่ช่องที่เพิ่งส่งเสียงกะพริบ (มิลลิวินาที)
+          roundsPerGame: 4, // จำนวนจังหวะในหนึ่งเกมโหมดโจทย์
+          roundPoints: 100, // คะแนนของข้อที่ตรวจผ่านในครั้งแรก
+          checkPenaltyPoints: 25, // คะแนนที่หักต่อการตรวจที่ไม่ผ่านหนึ่งครั้ง
+          minRoundPoints: 25, // คะแนนน้อยที่สุดของข้อที่ผ่าน
+          firstTryBonusPoints: 50, // โบนัสต่อข้อที่ผ่านในการตรวจครั้งแรกติดกัน (คูณจำนวนข้อที่ติดกัน)
+          maxStreakBonus: 3, // จำนวนข้อติดกันสูงสุดที่นับโบนัส
+          targetLoops: 2 // จำนวนห้องที่ปุ่ม "ฟังโจทย์" เล่น
+        };
+        /* ═══════════ โซน C · แกนเกม (ห้ามแก้) ═══════════ */
+        /* แกนเกม: ฟังก์ชันล้วน ไม่แตะหน้าจอ เสียง หรือที่เก็บข้อมูล ตัวสุ่มส่งเข้ามาจากข้างนอกเพื่อทดสอบซ้ำได้
+           ตารางจังหวะ (grid) หน้าตาเป็น { beats, rows: { รหัสแถว: [true หรือ false ต่อช่อง] } } */
+        var Core = {};
+
+        // สร้างตัวสุ่มที่ให้ผลซ้ำได้เมื่อใช้เมล็ดเดียวกัน (mulberry32) คืนฟังก์ชันที่ให้เลข 0 ถึงน้อยกว่า 1
+        Core.makeRng = function (seed) {
+          var state = seed >>> 0;
+          return function () {
+            state = (state + 0x6d2b79f5) >>> 0;
+            var x = state;
+            x = Math.imul(x ^ (x >>> 15), x | 1);
+            x ^= x + Math.imul(x ^ (x >>> 7), x | 61);
+            return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+          };
+        };
+
+        // สลับลำดับรายการโดยไม่แก้รายการเดิม
+        Core.shuffle = function (list, rng) {
+          var copy = list.slice();
+          for (var i = copy.length - 1; i > 0; i--) {
+            var j = Math.floor(rng() * (i + 1));
+            var temp = copy[i];
+            copy[i] = copy[j];
+            copy[j] = temp;
+          }
+          return copy;
+        };
+
+        // แปลงข้อความแถว เช่น "x...x..." เป็นรายการ true/false
+        Core.parseRow = function (text) {
+          return String(text)
+            .split('')
+            .map(function (letter) {
+              return letter === 'x';
+            });
+        };
+
+        // แปลงรายการ true/false กลับเป็นข้อความแถว x กับ .
+        Core.rowToString = function (row) {
+          return row
+            .map(function (on) {
+              return on ? 'x' : '.';
+            })
+            .join('');
+        };
+
+        // ตารางว่างที่มีแถวตามรหัสที่ให้ ยาว beats × stepsPerBeat ช่อง
+        Core.emptyGrid = function (trackIds, beats, stepsPerBeat) {
+          var rows = {};
+          trackIds.forEach(function (id) {
+            var row = [];
+            for (var i = 0; i < beats * stepsPerBeat; i++) row.push(false);
+            rows[id] = row;
+          });
+          return { beats: beats, rows: rows };
+        };
+
+        // ทำสำเนาตาราง
+        Core.copyGrid = function (grid) {
+          var rows = {};
+          Object.keys(grid.rows).forEach(function (id) {
+            rows[id] = grid.rows[id].slice();
+          });
+          return { beats: grid.beats, rows: rows };
+        };
+
+        // สลับช่องหนึ่งช่อง คืนตารางใหม่ (ไม่แก้ตารางเดิม) ถ้าไม่มีแถวหรือช่องนั้นให้คืนสำเนาเดิม
+        Core.toggle = function (grid, trackId, step) {
+          var next = Core.copyGrid(grid);
+          var row = next.rows[trackId];
+          if (row && step >= 0 && step < row.length) row[step] = !row[step];
+          return next;
+        };
+
+        // เปลี่ยนจำนวนจังหวะต่อห้อง: 4 เป็น 3 เก็บ 12 ช่องแรก 3 เป็น 4 เติมช่องว่างต่อท้าย
+        Core.resize = function (grid, beats, stepsPerBeat) {
+          var length = beats * stepsPerBeat;
+          var rows = {};
+          Object.keys(grid.rows).forEach(function (id) {
+            var row = grid.rows[id].slice(0, length);
+            while (row.length < length) row.push(false);
+            rows[id] = row;
+          });
+          return { beats: beats, rows: rows };
+        };
+
+        // สร้างตารางจากจังหวะที่ตั้งไว้ แถวที่จังหวะนั้นไม่ได้เขียนไว้จะว่าง
+        Core.gridFromGroove = function (groove, trackIds, stepsPerBeat) {
+          var grid = Core.emptyGrid(trackIds, groove.beats, stepsPerBeat);
+          trackIds.forEach(function (id) {
+            if (typeof groove.rows[id] === 'string') grid.rows[id] = Core.parseRow(groove.rows[id]);
+          });
+          return grid;
+        };
+
+        // ตรวจจังหวะหนึ่งอัน คืนรายการปัญหาเป็นข้อความไทย (ว่างคือใช้ได้)
+        Core.validateGroove = function (groove, trackIds, stepsPerBeat) {
+          var problems = [];
+          if (groove.beats !== 3 && groove.beats !== 4) problems.push(TEXT.grooveBadBeats);
+          var length = groove.beats * stepsPerBeat;
+          var anyHit = false;
+          Object.keys(groove.rows).forEach(function (id) {
+            var row = groove.rows[id];
+            if (trackIds.indexOf(id) === -1) problems.push(fmt(TEXT.grooveUnknownTrack, { id: id }));
+            if (typeof row !== 'string') {
+              problems.push(fmt(TEXT.grooveBadChar, { id: id }));
+              return;
+            }
+            if (row.length !== length) problems.push(fmt(TEXT.grooveBadLength, { id: id, n: row.length, m: length }));
+            if (/[^x.]/.test(row)) problems.push(fmt(TEXT.grooveBadChar, { id: id }));
+            if (row.indexOf('x') !== -1) anyHit = true;
+          });
+          if (!anyHit) problems.push(TEXT.grooveNoHit);
+          return problems;
+        };
+
+        // เทียบตารางของผู้เล่นกับตารางโจทย์ แถวที่โจทย์ไม่มีถือว่าว่าง ช่องที่เกินมาในแถวนั้นนับเป็นช่องเกิน
+        Core.compare = function (grid, target) {
+          var ids = Object.keys(grid.rows);
+          Object.keys(target.rows).forEach(function (id) {
+            if (ids.indexOf(id) === -1) ids.push(id);
+          });
+          var result = { perfect: true, correct: 0, missing: [], extra: [] };
+          ids.forEach(function (id) {
+            var mine = grid.rows[id] || [];
+            var goal = target.rows[id] || [];
+            var length = Math.max(mine.length, goal.length);
+            for (var step = 0; step < length; step++) {
+              var has = mine[step] === true;
+              var wants = goal[step] === true;
+              if (has && wants) result.correct += 1;
+              else if (wants) result.missing.push({ trackId: id, step: step });
+              else if (has) result.extra.push({ trackId: id, step: step });
+            }
+          });
+          result.perfect = result.missing.length === 0 && result.extra.length === 0;
+          return result;
+        };
+
+        // ชื่อบอกตำแหน่งของช่องตามวิธีนับ เช่น ช่อง 6 ของจังหวะละสี่ช่องคือ "2และ"
+        Core.stepName = function (step, stepsPerBeat, syllables) {
+          var beat = Math.floor(step / stepsPerBeat) + 1;
+          return String(beat) + (syllables[step % stepsPerBeat] || '');
+        };
+
+        // วิธีนับของแถวหนึ่ง เฉพาะช่องที่มีเสียง คั่นด้วย " · " แถวว่างได้ข้อความว่าง
+        Core.countingText = function (row, stepsPerBeat, syllables) {
+          var parts = [];
+          row.forEach(function (on, step) {
+            if (on) parts.push(Core.stepName(step, stepsPerBeat, syllables));
+          });
+          return parts.join(' · ');
+        };
+
+        // ความยาวของหนึ่งช่องเป็นมิลลิวินาที
+        Core.stepMs = function (bpm, stepsPerBeat) {
+          return 60000 / bpm / stepsPerBeat;
+        };
+
+        // ช่องที่ถึงเวลาเล่นเมื่อผ่านไป elapsedMs (นับต่อเนื่องไม่วน ผู้เรียกหารเศษเอง) ไม่เป็นลบ
+        Core.stepIndexAt = function (elapsedMs, stepMs) {
+          return Math.max(0, Math.floor(elapsedMs / stepMs));
+        };
+
+        // รหัสแถวที่มีเสียงในช่องที่ step (เรียงตามลำดับแถวในตาราง)
+        Core.hitsAt = function (grid, step) {
+          return Object.keys(grid.rows).filter(function (id) {
+            return grid.rows[id][step] === true;
+          });
+        };
+
+        // เลือกจังหวะที่ใช้ออกโจทย์ count อัน ไม่ซ้ำ จากระดับที่กำหนด
+        // เรียงจากระดับง่ายไปยาก ในระดับเดียวกันเรียงแบบสุ่ม
+        Core.pickRounds = function (grooves, level, count, rng) {
+          var pool = grooves.filter(function (groove) {
+            return level.grooveLevels.indexOf(groove.level) !== -1;
+          });
+          var chosen = Core.shuffle(pool, rng)
+            .slice(0, count)
+            .map(function (groove, index) {
+              return { groove: groove, index: index };
+            });
+          chosen.sort(function (a, b) {
+            return a.groove.level - b.groove.level || a.index - b.index;
+          });
+          return chosen.map(function (item) {
+            return item.groove;
+          });
+        };
+
+        // คะแนนของข้อที่ผ่าน: 0 ถ้าดูเฉลย ไม่เช่นนั้นลดตามจำนวนครั้งที่ตรวจไม่ผ่าน และเพิ่มโบนัสถ้าผ่านในครั้งแรก
+        // streak คือจำนวนข้อที่ผ่านในครั้งแรกติดกัน โดยนับข้อนี้ด้วย
+        Core.roundScore = function (failedChecks, revealed, streak, config) {
+          if (revealed) return 0;
+          var base = Math.max(config.minRoundPoints, config.roundPoints - failedChecks * config.checkPenaltyPoints);
+          if (failedChecks > 0) return base;
+          return base + config.firstTryBonusPoints * Math.min(streak, config.maxStreakBonus);
+        };
+
+        // ดาวของเกม: 3 ถ้าทุกข้อผ่านโดยไม่เคยตรวจไม่ผ่าน
+        // 2 ถ้าไม่ดูเฉลยเลยและตรวจไม่ผ่านรวมไม่เกินจำนวนข้อ ไม่เช่นนั้น 1
+        Core.stars = function (rounds) {
+          var failed = 0;
+          var revealed = 0;
+          rounds.forEach(function (round) {
+            failed += round.failedChecks;
+            revealed += round.revealed ? 1 : 0;
+          });
+          if (revealed === 0 && failed === 0) return 3;
+          return revealed === 0 && failed <= rounds.length ? 2 : 1;
+        };
+
+        // รหัสแถวที่มีเสียงอย่างน้อยหนึ่งช่อง
+        Core.usedTracks = function (grid) {
+          return Object.keys(grid.rows).filter(function (id) {
+            return grid.rows[id].indexOf(true) !== -1;
+          });
+        };
+
+        // แปลงตารางเป็นรูปแบบที่เก็บ: { beats, bpm, rows: { รหัสแถว: 'x.x.' } }
+        Core.gridToSaved = function (grid, bpm) {
+          var rows = {};
+          Object.keys(grid.rows).forEach(function (id) {
+            rows[id] = Core.rowToString(grid.rows[id]);
+          });
+          return { beats: grid.beats, bpm: bpm, rows: rows };
+        };
+
+        // อ่านรูปแบบที่เก็บกลับเป็นตาราง ถ้าข้อมูลเสียหายคืนค่าว่าง
+        // แถวที่ไม่รู้จักถูกข้าม แถวที่สั้นหรือยาวถูกปรับให้พอดี
+        Core.gridFromSaved = function (saved, trackIds, stepsPerBeat) {
+          if (!saved || typeof saved !== 'object' || (saved.beats !== 3 && saved.beats !== 4)) return null;
+          if (!saved.rows || typeof saved.rows !== 'object') return null;
+          var grid = Core.emptyGrid(trackIds, saved.beats, stepsPerBeat);
+          var length = saved.beats * stepsPerBeat;
+          trackIds.forEach(function (id) {
+            var text = saved.rows[id];
+            if (typeof text !== 'string' || /[^x.]/.test(text)) return;
+            var row = Core.parseRow(text).slice(0, length);
+            while (row.length < length) row.push(false);
+            grid.rows[id] = row;
+          });
+          return grid;
+        };
+
+        // ผลใหม่ดีกว่าสถิติที่เก็บไว้หรือไม่ (ผล 0 คะแนนไม่นับเป็นสถิติใหม่)
+        Core.isBetter = function (result, old) {
+          if (!old || typeof old !== 'object') return result.score > 0;
+          return result.score > old.score;
+        };
+
+        // กฎของเหรียญ: แต่ละกฎรับ (ค่าของเหรียญ, ผลของเกมที่เพิ่งจบ, สถิติ, ข้อมูล) แล้วตอบว่าได้เหรียญหรือไม่
+        Core.badgeRules = {
+          solvedAtLeast: function (value, result, stats) {
+            return stats.solved.length >= value;
+          },
+          allFirstTry: function (value, result) {
+            var played = result.mode === 'copy' || result.mode === 'read';
+            return played && result.rounds.length > 0 && result.rounds.every(function (round) {
+              return round.failedChecks === 0 && !round.revealed;
+            });
+          },
+          cleanMode: function (value, result) {
+            return result.mode === value && result.rounds.length > 0 && result.rounds.every(function (round) {
+              return !round.revealed;
+            });
+          },
+          cleanHard: function (value, result) {
+            return result.mode === value && result.level === 'hard' && result.rounds.length > 0 &&
+              result.rounds.every(function (round) {
+                return !round.revealed;
+              });
+          },
+          solvedBeats: function (value, result, stats, data) {
+            return data.GROOVES.some(function (groove) {
+              return groove.beats === value && stats.solved.indexOf(groove.id) !== -1;
+            });
+          },
+          solvedAll: function (value, result, stats, data) {
+            return data.GROOVES.every(function (groove) {
+              return stats.solved.indexOf(groove.id) !== -1;
+            });
+          },
+          freeTracksAtLeast: function (value, result) {
+            return result.mode === 'free' && result.tracksUsed >= value;
+          }
+        };
+
+        // เล่นเกมจำลองด้วยตัวสุ่มที่กำหนด คืนผลเหมือนเหตุการณ์ gameEnd (ใช้ในการตรวจระบบ ไม่ใช้กับเกมจริง)
+        // ข้อแรกตรวจไม่ผ่านหนึ่งครั้ง ข้อที่เหลือผ่านในครั้งแรก grooves คือรายการจังหวะที่ใช้ออกโจทย์
+        Core.scriptedGame = function (mode, level, seed, config, grooves) {
+          var rng = Core.makeRng(seed);
+          var picked = Core.pickRounds(grooves, level, config.roundsPerGame, rng);
+          var streak = 0;
+          var score = 0;
+          var rounds = picked.map(function (groove, index) {
+            var failed = index === 0 ? 1 : 0;
+            streak = failed === 0 ? streak + 1 : 0;
+            score += Core.roundScore(failed, false, streak, config);
+            return { grooveId: groove.id, failedChecks: failed, revealed: false };
+          });
+          return { mode: mode, level: level.id, score: score, stars: Core.stars(rounds), rounds: rounds };
+        };
+
+        /* ── ข้อสอบของปุ่ม "ตรวจระบบ": ทดสอบแกนเกมโดยไม่แตะสถานะของเกมที่กำลังเล่น ── */
+
+        // เทียบค่าสองค่า ถ้าไม่เท่ากันให้หยุดพร้อมข้อความบอกว่าได้อะไรและควรได้อะไร
+        function same(actual, expected, label) {
+          if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+            var detail = 'ได้ ' + JSON.stringify(actual) + ' ควรเป็น ' + JSON.stringify(expected);
+            throw new Error((label ? label + ': ' : '') + detail);
+          }
+        }
+
+        // ตรวจเงื่อนไข ถ้าไม่เป็นจริงให้หยุดพร้อมข้อความ
+        function check(condition, label) {
+          if (!condition) throw new Error(label);
+        }
+
+        // ตัวเลขตั้งต้นของสเปกสำหรับข้อสอบที่คิดคะแนน ใช้ชุดนี้เสมอ
+        // เพื่อให้การปรับตัวเลขในโซน B ไม่ทำให้ "ตรวจระบบ" ไม่ผ่านโดยไม่จำเป็น
+        var SPEC_CONFIG = {
+          roundsPerGame: 4,
+          roundPoints: 100,
+          checkPenaltyPoints: 25,
+          minRoundPoints: 25,
+          firstTryBonusPoints: 50,
+          maxStreakBonus: 3
+        };
+
+        // แถวเสียงและจังหวะตัวอย่างสำหรับข้อสอบ (ไม่ผูกกับตาราง TRACKS และ GROOVES ที่นิสิตแก้ได้)
+        var SPEC_TRACKS = ['hat', 'snare', 'wood', 'kick'];
+        var SPEC_ROCK = {
+          id: 'rock',
+          beats: 4,
+          rows: { kick: 'x.......x.......', snare: '....x.......x...', hat: 'x.x.x.x.x.x.x.x.' }
+        };
+
+        // จังหวะตัวอย่างสิบอัน สามระดับ สำหรับข้อสอบการเลือกโจทย์
+        function specGrooves() {
+          var list = [];
+          for (var i = 0; i < 10; i++) {
+            list.push({ id: 'g' + i, level: (i % 3) + 1, beats: 4, rows: { kick: 'x...x...x...x...' } });
+          }
+          return list;
+        }
+
+        // ชุดข้อสอบแกนเกม แต่ละข้อมีชื่อภาษาไทยและฟังก์ชัน run ที่หยุดเมื่อไม่ผ่าน
+        var CORE_TESTS = [
+          {
+            name: 'แปลงแถวไปกลับได้ครบทุกแถวของทุกจังหวะ',
+            run: function () {
+              same(Core.rowToString(Core.parseRow('x..x.x')), 'x..x.x');
+              GROOVES.forEach(function (groove) {
+                Object.keys(groove.rows).forEach(function (id) {
+                  same(Core.rowToString(Core.parseRow(groove.rows[id])), groove.rows[id], groove.id + ' ' + id);
+                });
+              });
+            }
+          },
+          {
+            name: 'สลับช่องหนึ่งช่องโดยไม่แก้ตารางเดิม',
+            run: function () {
+              var grid = Core.emptyGrid(SPEC_TRACKS, 4, 4);
+              var next = Core.toggle(grid, 'snare', 5);
+              same(next.rows.snare[5], true);
+              same(grid.rows.snare[5], false, 'ตารางเดิมต้องไม่เปลี่ยน');
+              same(Core.toggle(next, 'snare', 5).rows.snare[5], false);
+              same(Core.toggle(grid, 'nope', 0), grid);
+              same(Core.usedTracks(next), ['snare']);
+            }
+          },
+          {
+            name: 'เปลี่ยนจำนวนจังหวะต่อห้อง 4 เป็น 3 เก็บ 12 ช่องแรก และ 3 เป็น 4 เติมช่องว่าง',
+            run: function () {
+              var grid = Core.emptyGrid(['kick'], 4, 4);
+              grid.rows.kick[0] = true;
+              grid.rows.kick[11] = true;
+              grid.rows.kick[12] = true;
+              var small = Core.resize(grid, 3, 4);
+              same(small.rows.kick.length, 12);
+              same([small.rows.kick[0], small.rows.kick[11]], [true, true]);
+              var back = Core.resize(small, 4, 4);
+              same(back.rows.kick.length, 16);
+              same([back.rows.kick[11], back.rows.kick[12]], [true, false]);
+            }
+          },
+          {
+            name: 'เทียบตาราง: ช่องเกิน ช่องขาด และแถวที่โจทย์ไม่ใช้',
+            run: function () {
+              var target = Core.gridFromGroove(SPEC_ROCK, SPEC_TRACKS, 4);
+              same(Core.compare(Core.gridFromGroove(SPEC_ROCK, SPEC_TRACKS, 4), target).perfect, true);
+              var mine = Core.toggle(target, 'kick', 8);
+              mine = Core.toggle(mine, 'snare', 3);
+              var result = Core.compare(mine, target);
+              same(result.perfect, false);
+              same(result.missing, [{ trackId: 'kick', step: 8 }]);
+              same(result.extra, [{ trackId: 'snare', step: 3 }]);
+              var onlyKick = { beats: 4, rows: { kick: Core.parseRow('x...............') } };
+              var other = Core.toggle(Core.emptyGrid(['kick', 'wood'], 4, 4), 'wood', 2);
+              other = Core.toggle(other, 'kick', 0);
+              same(Core.compare(other, onlyKick).extra, [{ trackId: 'wood', step: 2 }]);
+            }
+          },
+          {
+            name: 'วิธีนับ เช่น 1 · 3 · 3และ',
+            run: function () {
+              var syllables = ['', 'อี', 'และ', 'อะ'];
+              same(Core.countingText(Core.parseRow('x.......x.x.....'), 4, syllables), '1 · 3 · 3และ');
+              same(Core.countingText(Core.parseRow('....x...x...'), 4, syllables), '2 · 3');
+              same(Core.countingText(Core.parseRow('xxxx............'), 4, syllables), '1 · 1อี · 1และ · 1อะ');
+              same(Core.countingText(Core.parseRow('................'), 4, syllables), '');
+            }
+          },
+          {
+            name: 'ความยาวของช่องและช่องที่ถึงเวลาเล่น',
+            run: function () {
+              same(Core.stepMs(120, 4), 125);
+              same(Core.stepIndexAt(0, 125), 0);
+              same(Core.stepIndexAt(124.9, 125), 0);
+              same(Core.stepIndexAt(125, 125), 1);
+              same(Core.stepIndexAt(-50, 125), 0);
+            }
+          },
+          {
+            name: 'แถวที่มีเสียงในแต่ละช่องของร็อกพื้นฐาน',
+            run: function () {
+              var grid = Core.gridFromGroove(SPEC_ROCK, SPEC_TRACKS, 4);
+              same(Core.hitsAt(grid, 0).sort(), ['hat', 'kick']);
+              same(Core.hitsAt(grid, 4).sort(), ['hat', 'snare']);
+              same(Core.hitsAt(grid, 1), []);
+            }
+          },
+          {
+            name: 'เลือกโจทย์ไม่ซ้ำ ซ้ำได้เมื่อใช้เมล็ดเดิม และเรียงจากง่ายไปยาก',
+            run: function () {
+              var grooves = specGrooves();
+              var level = { id: 'x', grooveLevels: [1, 2] };
+              var first = Core.pickRounds(grooves, level, 4, Core.makeRng(9));
+              same(first, Core.pickRounds(grooves, level, 4, Core.makeRng(9)));
+              same(new Set(first.map(function (g) { return g.id; })).size, 4);
+              first.forEach(function (groove, index) {
+                check([1, 2].indexOf(groove.level) !== -1, 'ระดับผิด');
+                if (index) check(first[index - 1].level <= groove.level, 'ไม่เรียงจากง่ายไปยาก');
+              });
+              same(Core.pickRounds(grooves, { grooveLevels: [3] }, 10, Core.makeRng(1)).length, 3);
+            }
+          },
+          {
+            name: 'คะแนนของข้อและโบนัสผ่านครั้งแรกติดกัน',
+            run: function () {
+              same(Core.roundScore(0, false, 1, SPEC_CONFIG), 150);
+              same(Core.roundScore(2, false, 1, SPEC_CONFIG), 50);
+              same(Core.roundScore(5, false, 1, SPEC_CONFIG), 25);
+              same(Core.roundScore(0, true, 1, SPEC_CONFIG), 0);
+              same(Core.roundScore(0, false, 5, SPEC_CONFIG), Core.roundScore(0, false, 3, SPEC_CONFIG));
+            }
+          },
+          {
+            name: 'ดาวสามระดับ',
+            run: function () {
+              var clean = [{ failedChecks: 0, revealed: false }, { failedChecks: 0, revealed: false }];
+              var some = [{ failedChecks: 1, revealed: false }, { failedChecks: 0, revealed: false }];
+              var shown = [{ failedChecks: 0, revealed: true }, { failedChecks: 0, revealed: false }];
+              same([Core.stars(clean), Core.stars(some), Core.stars(shown)], [3, 2, 1]);
+            }
+          },
+          {
+            name: 'ตรวจจังหวะ: จังหวะที่ใช้ได้ผ่าน จังหวะที่เสียแบบต่าง ๆ ถูกปฏิเสธ',
+            run: function () {
+              GROOVES.forEach(function (groove) {
+                var problems = Core.validateGroove(groove, TRACKS.map(function (t) { return t.id; }), 4);
+                same(problems, [], 'จังหวะ ' + groove.id);
+              });
+              function problemsOf(rows, beats) {
+                return Core.validateGroove({ id: 'x', beats: beats || 4, rows: rows }, SPEC_TRACKS, 4).length;
+              }
+              same(problemsOf({ kick: 'x...x...x...x...' }), 0);
+              check(problemsOf({ kick: 'x...x...x...x..' }) > 0, 'แถวสั้นต้องถูกปฏิเสธ');
+              check(problemsOf({ cowbell: 'x...x...x...x...' }) > 0, 'แถวที่ไม่รู้จักต้องถูกปฏิเสธ');
+              check(problemsOf({ kick: 'x...x...x...x..?' }) > 0, 'ตัวอักษรแปลกต้องถูกปฏิเสธ');
+              check(problemsOf({ kick: '................' }) > 0, 'ไม่มีเสียงเลยต้องถูกปฏิเสธ');
+              check(problemsOf({ kick: 'x...x...x...x...' }, 5) > 0, 'จำนวนจังหวะต่อห้องผิดต้องถูกปฏิเสธ');
+            }
+          },
+          {
+            name: 'กฎของเหรียญตอบได้ทั้งจริงและไม่จริง',
+            run: function () {
+              var rules = Core.badgeRules;
+              var data = {
+                GROOVES: [
+                  { id: 'a', beats: 4 },
+                  { id: 'w', beats: 3 }
+                ]
+              };
+              var clean = { mode: 'read', level: 'easy', rounds: [{ failedChecks: 0, revealed: false }] };
+              var dirty = { mode: 'read', level: 'easy', rounds: [{ failedChecks: 2, revealed: true }] };
+              var hard = { mode: 'copy', level: 'hard', rounds: [{ failedChecks: 1, revealed: false }] };
+              function solved(ids) {
+                return { solved: ids };
+              }
+              same(
+                [rules.solvedAtLeast(1, clean, solved(['a'])), rules.solvedAtLeast(2, clean, solved(['a']))],
+                [true, false]
+              );
+              same([rules.allFirstTry(1, clean), rules.allFirstTry(1, dirty)], [true, false]);
+              same(
+                [rules.cleanMode('read', clean), rules.cleanMode('read', dirty), rules.cleanMode('copy', clean)],
+                [true, false, false]
+              );
+              same([rules.cleanHard('copy', hard), rules.cleanHard('copy', clean)], [true, false]);
+              same(
+                [rules.solvedBeats(3, clean, solved(['w']), data), rules.solvedBeats(3, clean, solved(['a']), data)],
+                [true, false]
+              );
+              same(
+                [rules.solvedAll(1, clean, solved(['a', 'w']), data), rules.solvedAll(1, clean, solved(['a']), data)],
+                [true, false]
+              );
+              function free(count) {
+                return { mode: 'free', tracksUsed: count };
+              }
+              same([rules.freeTracksAtLeast(3, free(3)), rules.freeTracksAtLeast(3, free(2))], [true, false]);
+              BADGES.forEach(function (badge) {
+                check(typeof rules[badge.test] === 'function', 'ไม่มีกฎ ' + badge.test);
+              });
+            }
+          },
+          {
+            name: 'เกมจำลองโหมดฟังแล้วเรียงและอ่านแล้วเรียงจบด้วยคะแนนที่คาดไว้',
+            run: function () {
+              var level = { id: 'medium', grooveLevels: [1, 2] };
+              var copy = Core.scriptedGame('copy', level, 4, SPEC_CONFIG, specGrooves());
+              same(copy.rounds.length, 4);
+              same(copy.score, 75 + 150 + 200 + 250);
+              same(copy.stars, 2);
+              same(copy, Core.scriptedGame('copy', level, 4, SPEC_CONFIG, specGrooves()));
+              var rounds = Core.scriptedGame('read', level, 4, SPEC_CONFIG, specGrooves()).rounds;
+              function ids(list) {
+                return list.map(function (round) {
+                  return round.grooveId;
+                });
+              }
+              same(ids(rounds), ids(copy.rounds));
+            }
+          },
+          {
+            name: 'เก็บและอ่านจังหวะที่สร้างเองกลับได้ ข้อมูลเสียหายถูกปฏิเสธ',
+            run: function () {
+              var grid = Core.toggle(Core.emptyGrid(SPEC_TRACKS, 3, 4), 'hat', 2);
+              var saved = Core.gridToSaved(grid, 90);
+              same(saved.rows.hat, '..x.........');
+              same(Core.gridFromSaved(saved, SPEC_TRACKS, 4), grid);
+              same(Core.gridFromSaved({ beats: 5, rows: {} }, SPEC_TRACKS, 4), null);
+              same(Core.gridFromSaved('x', SPEC_TRACKS, 4), null);
+              var odd = Core.gridFromSaved({ beats: 4, rows: { hat: 'x?', kick: 'x' } }, SPEC_TRACKS, 4);
+              same(odd.rows.hat.length, 16);
+              same(odd.rows.hat.indexOf(true), -1);
+              same(odd.rows.kick.length, 16);
+              same(odd.rows.kick[0], true);
+            }
+          },
+          {
+            name: 'นับข้อมูลในตารางของเกม',
+            run: function () {
+              check(TRACKS.length > 0 && GROOVES.length > 0 && MODES.length > 0, 'ตารางข้อมูลว่าง');
+              TRACKS.forEach(function (track) {
+                check(['kick', 'noise', 'tone'].indexOf(track.kind) !== -1, 'แถว ' + track.id + ' ชนิดเสียงไม่รู้จัก');
+              });
+              check(COUNT_SYLLABLES.length === CONFIG.stepsPerBeat, 'COUNT_SYLLABLES ต้องมีเท่ากับ stepsPerBeat');
+            }
+          }
+        ];
+        /* ═══════════ โซน D · หน้าจอและเสียง (ห้ามแก้ถ้าไม่จำเป็น) ═══════════ */
+        /* ── ส่วนกลางของหน้าจอ: ทุกเกมใช้ชุดฟังก์ชันนี้ร่วมกัน ── */
+        var handlers = {};
+        var errors = [];
+        var warned = {};
+        var memory = {};
+        var storageOK = true;
+        var activeScreen = 'home';
+        var toastTimer = null;
+        var confirmTimers = {};
+        var audio = null;
+        var master = null;
+        var audioFailed = false;
+        var stats = null;
+        var settings = null;
+
+        // คืนองค์ประกอบตามรหัสในหน้าเว็บ
+        function byId(id) {
+          return document.getElementById(id);
+        }
+
+        // ทำสำเนาข้อมูลธรรมดา (ตัวเลข ข้อความ รายการ) เพื่อไม่ให้แก้ของเดิมโดยไม่ตั้งใจ
+        function clone(value) {
+          return JSON.parse(JSON.stringify(value));
+        }
+
+        // แทนที่ {ชื่อ} ในข้อความด้วยค่าที่ให้มา
+        function fmt(text, vars) {
+          return String(text).replace(/\{(\w+)\}/g, function (all, name) {
+            return vars && vars[name] !== undefined ? vars[name] : all;
+          });
+        }
+
+        // ดึงข้อความภาษาไทยจากตาราง TEXT (ถ้าไม่มีรหัสนั้น คืนรหัสกลับไปให้เห็นว่าขาด)
+        function t(key, vars) {
+          return TEXT[key] === undefined ? key : fmt(TEXT[key], vars);
+        }
+
+        // สร้างองค์ประกอบ HTML พร้อมคุณสมบัติและลูก
+        function el(tag, props, kids) {
+          var node = document.createElement(tag);
+          Object.keys(props || {}).forEach(function (name) {
+            if (name === 'text') {
+              node.textContent = props.text;
+            } else if (name === 'on') {
+              Object.keys(props.on).forEach(function (eventName) {
+                node.addEventListener(eventName, props.on[eventName]);
+              });
+            } else {
+              node.setAttribute(name, props[name]);
+            }
+          });
+          (kids || []).forEach(function (kid) {
+            if (kid) node.appendChild(kid);
+          });
+          return node;
+        }
+
+        // สร้างองค์ประกอบ SVG พร้อมคุณสมบัติและลูก
+        function svg(tag, attrs, kids) {
+          var node = document.createElementNS('http://www.w3.org/2000/svg', tag);
+          Object.keys(attrs || {}).forEach(function (name) {
+            if (name === 'text') {
+              node.textContent = attrs.text;
+            } else {
+              node.setAttribute(name, attrs[name]);
+            }
+          });
+          (kids || []).forEach(function (kid) {
+            if (kid) node.appendChild(kid);
+          });
+          return node;
+        }
+
+        // ใส่ข้อความภาษาไทยลงในองค์ประกอบที่มี data-t และ data-t-aria
+        function applyText() {
+          document.querySelectorAll('[data-t]').forEach(function (node) {
+            node.textContent = t(node.getAttribute('data-t'));
+          });
+          document.querySelectorAll('[data-t-aria]').forEach(function (node) {
+            node.setAttribute('aria-label', t(node.getAttribute('data-t-aria')));
+          });
+        }
+
+        // อ่านค่าจากเบราว์เซอร์ ถ้าเก็บไม่ได้ใช้ค่าในหน่วยความจำแทน
+        function read(key, fallback) {
+          var raw = null;
+          try {
+            raw = localStorage.getItem(key);
+          } catch (e) {
+            storageOK = false;
+            return Object.prototype.hasOwnProperty.call(memory, key) ? memory[key] : fallback;
+          }
+          if (raw === null) return fallback;
+          try {
+            return JSON.parse(raw);
+          } catch (e) {
+            return fallback;
+          }
+        }
+
+        // เก็บค่าในหน่วยความจำและในเบราว์เซอร์
+        function write(key, value) {
+          memory[key] = value;
+          try {
+            localStorage.setItem(key, JSON.stringify(value));
+          } catch (e) {
+            storageOK = false;
+          }
+          showStorageNotice();
+        }
+
+        // แสดงข้อความครั้งเดียวเมื่อเบราว์เซอร์เก็บสถิติไม่ได้
+        function showStorageNotice() {
+          byId('notice').textContent = storageOK ? '' : t('storageNotice');
+        }
+
+        // ลงทะเบียนผู้รับเหตุการณ์ของเกม
+        function on(name, handler) {
+          (handlers[name] || (handlers[name] = [])).push(handler);
+        }
+
+        // ส่งเหตุการณ์ให้ผู้รับ ถ้าส่วนเสริมของนิสิตพังจะจดไว้และเกมเล่นต่อได้
+        function emit(name, detail) {
+          (handlers[name] || []).slice().forEach(function (handler) {
+            try {
+              handler(detail);
+            } catch (e) {
+              var message = String(e);
+              errors.push(message);
+              if (!warned[message]) {
+                warned[message] = true;
+                console.warn(message);
+              }
+              if (!byId('checkResult').hidden) showCheck();
+            }
+          });
+        }
+
+        // เปลี่ยนหน้าจอ ย้ายโฟกัสไปที่หัวเรื่อง และส่งเหตุการณ์ screenChange
+        function showScreen(next) {
+          var from = activeScreen;
+          activeScreen = next;
+          document.querySelectorAll('[data-screen]').forEach(function (screen) {
+            screen.hidden = screen.getAttribute('data-screen') !== next;
+          });
+          var heading = document.querySelector('[data-screen="' + next + '"] h1');
+          if (heading) heading.focus();
+          if (from !== next) emit('screenChange', { from: from, to: next });
+        }
+
+        // แสดงข้อความสั้น ๆ ครั้งละหนึ่งข้อความ
+        function showToast(message) {
+          clearTimeout(toastTimer);
+          var box = byId('toast');
+          box.textContent = message;
+          box.hidden = false;
+          toastTimer = setTimeout(function () {
+            box.hidden = true;
+          }, CONFIG.toastMs);
+        }
+
+        // ปุ่มยืนยันสองขั้น: กดครั้งแรกเปลี่ยนข้อความ กดครั้งที่สองจึงทำจริง (ถ้า skip() เป็นจริงจะทำทันที)
+        function twoStep(button, labelKey, confirmKey, action, skip) {
+          button.addEventListener('click', function () {
+            if (skip && skip()) {
+              action();
+              return;
+            }
+            if (confirmTimers[button.id]) {
+              clearTimeout(confirmTimers[button.id]);
+              delete confirmTimers[button.id];
+              button.textContent = t(labelKey);
+              action();
+              return;
+            }
+            button.textContent = t(confirmKey);
+            confirmTimers[button.id] = setTimeout(function () {
+              delete confirmTimers[button.id];
+              button.textContent = t(labelKey);
+            }, CONFIG.confirmMs);
+          });
+        }
+
+        // ปรับข้อมูลที่เก็บไว้ให้มีรูปแบบเดียวกับค่าเริ่มต้น ส่วนที่เสียหายใช้ค่าเริ่มต้นแทน
+        function sanitize(stored, defaults) {
+          var out = {};
+          Object.keys(defaults).forEach(function (key) {
+            var fallback = defaults[key];
+            var value = stored && typeof stored === 'object' ? stored[key] : undefined;
+            var isObject = fallback !== null && typeof fallback === 'object' && !Array.isArray(fallback);
+            var fits = Array.isArray(fallback)
+              ? Array.isArray(value)
+              : isObject
+                ? value !== null && typeof value === 'object' && !Array.isArray(value)
+                : typeof value === typeof fallback;
+            out[key] = fits ? value : clone(fallback);
+          });
+          return out;
+        }
+
+        // โหลดสถิติและการตั้งค่า ถ้าข้อมูลเสียหายใช้ค่าเริ่มต้น
+        function loadAll() {
+          stats = sanitize(read(STORE.stats, null), STATS_DEFAULT);
+          stats.badges = stats.badges.filter(function (id) {
+            return typeof id === 'string';
+          });
+          settings = sanitize(read(STORE.settings, null), SETTINGS_DEFAULT);
+          settings.volume = Math.max(0, Math.min(100, Number(settings.volume) || 0));
+          if (['auto', 'light', 'dark'].indexOf(settings.theme) === -1) settings.theme = 'auto';
+        }
+
+        // บันทึกสถิติ
+        function saveStats() {
+          write(STORE.stats, stats);
+        }
+
+        // บันทึกการตั้งค่า
+        function saveSettings() {
+          write(STORE.settings, settings);
+        }
+
+        // ใช้ธีมและการลดการเคลื่อนไหวตามที่ตั้งไว้
+        function applyOptions() {
+          var root = document.documentElement;
+          if (settings.theme === 'light' || settings.theme === 'dark') {
+            root.setAttribute('data-theme', settings.theme);
+          } else {
+            root.removeAttribute('data-theme');
+          }
+          root.setAttribute('data-reduce', settings.reduceMotion ? 'true' : 'false');
+        }
+
+        // ถามว่าควรลดการเคลื่อนไหวหรือไม่ (ตั้งในเกมหรือตั้งที่ระบบ)
+        function motionReduced() {
+          var system =
+            typeof window.matchMedia === 'function' &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          return Boolean(settings.reduceMotion || system);
+        }
+
+        // เตรียมเครื่องเสียงหลังผู้เล่นแตะครั้งแรก ถ้าทำไม่ได้ เกมยังเล่นแบบไม่มีเสียงได้
+        function initAudio() {
+          if (audio) {
+            if (audio.resume) audio.resume().catch(function () {});
+            return;
+          }
+          var Context = window.AudioContext || window.webkitAudioContext;
+          if (!Context || audioFailed) return;
+          try {
+            audio = new Context();
+            master = audio.createGain();
+            master.gain.value = CONFIG.masterGain;
+            master.connect(audio.destination);
+            if (audio.resume) audio.resume().catch(function () {});
+          } catch (e) {
+            audio = null;
+            master = null;
+            audioFailed = true;
+          }
+        }
+
+        // ถามว่าเครื่องนี้เล่นเสียงได้หรือไม่
+        function audioAvailable() {
+          return Boolean(window.AudioContext || window.webkitAudioContext) && !audioFailed;
+        }
+
+        // เล่นเสียงหนึ่งตัวตามความถี่ ความยาว และเวลาเริ่ม (วินาทีนับจากตอนนี้)
+        function playTone(hz, durSec, whenSec, wave) {
+          if (!audio || !master) return;
+          try {
+            var level = settings.volume / 100;
+            var start = audio.currentTime + (whenSec || 0);
+            var attack = CONFIG.audioAttackSec;
+            var release = Math.min(CONFIG.audioReleaseSec, durSec / 2);
+            var osc = audio.createOscillator();
+            var gain = audio.createGain();
+            osc.type = wave || 'triangle';
+            osc.frequency.value = hz;
+            gain.gain.setValueAtTime(0, start);
+            gain.gain.linearRampToValueAtTime(level, start + attack);
+            gain.gain.setValueAtTime(level, start + Math.max(attack, durSec - release));
+            gain.gain.linearRampToValueAtTime(0, start + durSec);
+            osc.connect(gain);
+            gain.connect(master);
+            osc.start(start);
+            osc.stop(start + durSec + 0.02);
+          } catch (e) {
+            /* เล่นเสียงไม่ได้ก็เล่นเกมต่อแบบเงียบ */
+          }
+        }
+
+        // ทำให้เวลาเป็นข้อความ เช่น 1:05
+        function formatTime(ms) {
+          var total = Math.max(0, Math.round(ms / 1000));
+          var minutes = Math.floor(total / 60);
+          var seconds = total % 60;
+          return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+        }
+
+        // แสดงตัวเลขคะแนนที่ลอยขึ้นข้างค่าที่เปลี่ยน
+        function popScore(anchor, delta) {
+          if (!anchor || !delta || motionReduced()) return;
+          var pop = el('span', { class: 'score-pop', 'aria-hidden': 'true', text: '+' + delta });
+          anchor.appendChild(pop);
+          setTimeout(function () {
+            if (pop.parentNode) pop.parentNode.removeChild(pop);
+          }, CONFIG.popMs);
+        }
+
+        // นับตัวเลขขึ้นจาก 0 ถึงค่าสุดท้าย ถ้าลดการเคลื่อนไหวให้แสดงค่าสุดท้ายทันที
+        function countUp(node, value) {
+          node.setAttribute('data-value', String(value));
+          if (motionReduced() || value <= 0) {
+            node.textContent = String(value);
+            return;
+          }
+          var steps = 10;
+          var step = 0;
+          node.textContent = '0';
+          var timer = setInterval(function () {
+            step += 1;
+            node.textContent = String(Math.round((value * step) / steps));
+            if (step >= steps) clearInterval(timer);
+          }, CONFIG.countUpMs / steps);
+        }
+
+        // ให้บรรทัดในหน้าสรุปค่อย ๆ ปรากฏตามลำดับ
+        function revealRows(container) {
+          Array.prototype.forEach.call(container.children, function (child, index) {
+            child.style.setProperty('--row', index);
+          });
+          container.classList.remove('is-revealed');
+          setTimeout(function () {
+            container.classList.add('is-revealed');
+          }, 20);
+        }
+
+        // วาดเหรียญหนึ่งเหรียญ เหรียญที่ได้แล้วมีพื้น เหรียญที่ยังไม่ได้เป็นเส้นประ
+        function drawMedal(badge) {
+          var earned = stats.badges.indexOf(badge.id) !== -1;
+          var state = earned ? t('badgeHad') : t('badgeNot');
+          var icon = svg(
+            'svg',
+            {
+              viewBox: '0 0 32 32',
+              role: 'img',
+              class: earned ? 'medal-earned' : 'medal-open',
+              'aria-label': badge.name + ' · ' + badge.hint + ' · ' + state
+            },
+            [
+              svg('path', {
+                d: 'M10 2l6 10l6-10',
+                fill: 'none',
+                stroke: 'currentColor',
+                'stroke-width': 2,
+                'stroke-linejoin': 'round'
+              }),
+              svg('circle', {
+                cx: 16,
+                cy: 20,
+                r: 9,
+                fill: 'none',
+                stroke: 'currentColor',
+                'stroke-width': 2,
+                'stroke-dasharray': earned ? '0' : '3 3'
+              }),
+              earned
+                ? svg('path', {
+                    d: 'M11.5 20l3 3l6-6',
+                    fill: 'none',
+                    stroke: 'currentColor',
+                    'stroke-width': 2,
+                    'stroke-linecap': 'round'
+                  })
+                : null
+            ]
+          );
+          icon.appendChild(svg('title', { text: badge.name + ' · ' + badge.hint }));
+          return icon;
+        }
+
+        // วาดแถวเหรียญบนหน้าแรกและรายการเหรียญ
+        function renderMedals() {
+          var row = byId('homeBadges');
+          row.textContent = '';
+          BADGES.forEach(function (badge) {
+            row.appendChild(drawMedal(badge));
+          });
+          var list = byId('badgeList');
+          list.textContent = '';
+          BADGES.forEach(function (badge) {
+            var earned = stats.badges.indexOf(badge.id) !== -1;
+            var text = el('div', {}, [
+              el('strong', { text: badge.name }),
+              el('div', { class: 'soft small', text: badge.hint + ' · ' + (earned ? t('badgeHad') : t('badgeNot')) })
+            ]);
+            list.appendChild(el('li', {}, [drawMedal(badge), text]));
+          });
+        }
+
+        // ตรวจเหรียญหลังจบเกม แล้วแจ้งเหรียญใหม่ คืนรายการเหรียญใหม่
+        function awardBadges(result) {
+          var fresh = BADGES.filter(function (badge) {
+            if (stats.badges.indexOf(badge.id) !== -1) return false;
+            var rule = Core.badgeRules[badge.test];
+            try {
+              return Boolean(rule && rule(badge.value, result, stats, DATA));
+            } catch (e) {
+              return false;
+            }
+          });
+          fresh.forEach(function (badge) {
+            stats.badges.push(badge.id);
+            emit('badgeEarned', { id: badge.id, name: badge.name });
+          });
+          if (fresh.length) {
+            saveStats();
+            renderMedals();
+            showToast(
+              fresh.length === 1 ? t('badgeToast', { name: fresh[0].name }) : t('badgeAllDone', { n: fresh.length })
+            );
+          }
+          return fresh;
+        }
+
+        // วาดขั้นตอนวิธีเล่น แต่ละขั้นมีรูปเล็ก ๆ กับหนึ่งประโยค
+        function renderHowto() {
+          var list = byId('instructions');
+          list.textContent = '';
+          [1, 2, 3, 4].forEach(function (index) {
+            list.appendChild(el('li', {}, [howtoIcon(index), el('span', { text: t('howto' + index) })]));
+          });
+        }
+
+        // เปิดหน้าวิธีเล่น และจำไว้ว่าเคยเห็นแล้วเมื่อปิด
+        function closeHowto() {
+          if (!stats.seenHowto) {
+            stats.seenHowto = true;
+            saveStats();
+          }
+          showScreen('home');
+        }
+
+        // สรุปผลการตรวจระบบเป็น { passed, failed, results }
+        function runSelfCheck() {
+          var results = CORE_TESTS.map(function (test) {
+            try {
+              test.run();
+              return { name: test.name, ok: true, detail: '' };
+            } catch (e) {
+              return { name: test.name, ok: false, detail: String(e && e.message ? e.message : e) };
+            }
+          });
+          var failed = results.filter(function (item) {
+            return !item.ok;
+          }).length;
+          return { passed: results.length - failed, failed: failed, results: results };
+        }
+
+        // แสดงผลตรวจระบบในหน้าเว็บ ใช้ข้อความ ผ่าน/ไม่ผ่าน ไม่ใช้สีอย่างเดียว
+        function showCheck() {
+          var report = runSelfCheck();
+          var box = byId('checkResult');
+          box.hidden = false;
+          box.textContent = '';
+          box.appendChild(
+            el('p', {
+              class: report.failed ? 'is-fail' : 'is-pass',
+              text: report.failed
+                ? '× ' + t('selfCheckFail', { k: report.failed })
+                : '✓ ' + t('selfCheckPass', { n: report.passed, m: report.results.length })
+            })
+          );
+          var list = el('ul');
+          report.results.forEach(function (item) {
+            var mark = item.ok ? t('markPass') : t('markFail');
+            list.appendChild(el('li', { text: mark + ' · ' + item.name + (item.detail ? ' · ' + item.detail : '') }));
+          });
+          box.appendChild(list);
+          box.appendChild(el('p', { class: 'small', text: countsLine() + ' · ' + storageLine() }));
+          extraCheckLines().forEach(function (line) {
+            box.appendChild(el('p', { class: 'small', text: line }));
+          });
+          errors.forEach(function (message) {
+            box.appendChild(el('p', { class: 'is-fail', text: t('extensionLine', { error: message }) }));
+          });
+        }
+
+        // บอกว่าเบราว์เซอร์เก็บสถิติได้หรือไม่
+        function storageLine() {
+          return storageOK ? t('storageOk') : t('storageBlocked');
+        }
+
+        // ผูกปุ่มและช่องตั้งค่าที่ทุกเกมมีเหมือนกัน
+        function bindSharedControls() {
+          byId('openHowto').addEventListener('click', function () {
+            showScreen('howto');
+          });
+          byId('closeHowto').addEventListener('click', closeHowto);
+          byId('openBadges').addEventListener('click', function () {
+            showScreen('badges');
+          });
+          byId('closeBadges').addEventListener('click', function () {
+            goTo('home');
+          });
+          byId('volume').value = settings.volume;
+          byId('volume').addEventListener('input', function () {
+            settings.volume = Number(this.value);
+            saveSettings();
+          });
+          byId('testSound').addEventListener('click', function () {
+            initAudio();
+            playTone(440, 0.4, 0);
+          });
+          byId('theme').value = settings.theme;
+          byId('theme').addEventListener('change', function () {
+            settings.theme = this.value;
+            applyOptions();
+            saveSettings();
+          });
+          byId('reduce').checked = settings.reduceMotion;
+          byId('reduce').addEventListener('change', function () {
+            settings.reduceMotion = this.checked;
+            applyOptions();
+            saveSettings();
+          });
+          byId('check').addEventListener('click', showCheck);
+          twoStep(byId('clearData'), 'btnClearData', 'btnClearDataConfirm', function () {
+            [STORE.stats, STORE.settings].concat(STORE.extra || []).forEach(function (key) {
+              delete memory[key];
+              try {
+                localStorage.removeItem(key);
+              } catch (e) {
+                storageOK = false;
+              }
+            });
+            loadAll();
+            applyOptions();
+            renderMedals();
+            resetAfterClear();
+          });
+        }
+        /* ── ส่วนเฉพาะของกล่องจังหวะ ── */
+        var STORE = {
+          stats: 'beat-grid-stats-v1',
+          settings: 'beat-grid-settings-v1',
+          pattern: 'beat-grid-pattern-v1',
+          extra: ['beat-grid-pattern-v1']
+        };
+        var STATS_DEFAULT = { best: {}, badges: [], solved: [], freePlays: 0, seenHowto: false };
+        var SETTINGS_DEFAULT = {
+          volume: CONFIG.defaultVolumePercent,
+          theme: 'auto',
+          reduceMotion: false,
+          mode: 'free',
+          level: 'easy'
+        };
+        var DATA = {
+          TRACKS: TRACKS,
+          GROOVES: GROOVES,
+          LEVELS: LEVELS,
+          MODES: MODES,
+          BADGES: BADGES,
+          COUNT_SYLLABLES: COUNT_SYLLABLES,
+          TEXT: TEXT
+        };
+        var game = null;
+        var lastResult = null;
+        var grid = null;
+        var bpm = CONFIG.bpmDefault;
+        var trackIds = [];
+        var cellEls = {};
+        var labelEls = [];
+        var marks = {};
+        var playback = null;
+        var frameId = 0;
+        var hitTimers = {};
+        var noiseBuffer = null;
+        var noiseOwner = null;
+        var freeDirty = false;
+        var locked = false;
+        var nowStep = -1;
+        var focusTrack = 0;
+        var focusStep = 0;
+        var presetId = '';
+
+        // ข้อความนับจำนวนข้อมูลในตารางของเกม สำหรับแสดงในหน้าตรวจระบบ
+        function countsLine() {
+          var perLevel = [1, 2, 3]
+            .map(function (level) {
+              return validGrooves().filter(function (groove) {
+                return groove.level === level;
+              }).length;
+            })
+            .join('/');
+          return [
+            t('cntTracks', { n: TRACKS.length }),
+            t('cntGrooves', { n: validGrooves().length }) + ' (' + perLevel + ')',
+            t('cntModes', { n: MODES.length }),
+            t('cntBadges', { n: BADGES.length }),
+            t('cntScreens', { n: document.querySelectorAll('[data-screen]').length })
+          ].join(' · ');
+        }
+
+        // ข้อความเพิ่มเติมในหน้าตรวจระบบ: จังหวะที่ใช้ไม่ได้และเหตุผล
+        function extraCheckLines() {
+          var ids = TRACKS.map(function (track) {
+            return track.id;
+          });
+          return GROOVES.map(function (groove) {
+            return { groove: groove, problems: Core.validateGroove(groove, ids, CONFIG.stepsPerBeat) };
+          })
+            .filter(function (item) {
+              return item.problems.length > 0;
+            })
+            .map(function (item) {
+              return t('grooveSkipped', { id: item.groove.id, problem: item.problems.join(', ') });
+            });
+        }
+
+        // รูปประกอบของแต่ละขั้นในหน้าวิธีเล่น
+        function howtoIcon(index) {
+          var line = { fill: 'none', stroke: 'currentColor', 'stroke-width': 2.4, 'stroke-linecap': 'round' };
+          function shape(tag, attrs) {
+            return svg(tag, Object.assign({}, line, attrs));
+          }
+          function block(x, y, filled) {
+            return svg('rect', {
+              x: x,
+              y: y,
+              width: 12,
+              height: 12,
+              rx: 2,
+              fill: filled ? 'currentColor' : 'none',
+              stroke: 'currentColor',
+              'stroke-width': 2.4
+            });
+          }
+          var parts = [
+            [block(8, 8, true), block(24, 8, false), block(40, 8, false), block(8, 24, false), block(24, 24, true)],
+            [block(8, 12, true), block(24, 12, false), block(24, 28, true), shape('path', { d: 'M12 44h32' })],
+            [shape('path', { d: 'M10 40V16M10 16l22 8M10 32l22-8' }), block(36, 32, true)],
+            [shape('path', { d: 'M10 40l10-16l10 8l16-20' }), shape('path', { d: 'M38 12h8v8' })]
+          ];
+          return svg('svg', { viewBox: '0 0 56 56', 'aria-hidden': 'true' }, parts[index - 1]);
+        }
+
+        // จังหวะที่ใช้ได้ (ผ่านการตรวจ) จังหวะที่เสียจะถูกข้ามและไปรายงานในหน้าตรวจระบบ
+        function validGrooves() {
+          var ids = TRACKS.map(function (track) {
+            return track.id;
+          });
+          return GROOVES.filter(function (groove) {
+            return Core.validateGroove(groove, ids, CONFIG.stepsPerBeat).length === 0;
+          });
+        }
+
+        // หาแถวเสียงจากรหัส
+        function trackById(id) {
+          return (
+            TRACKS.filter(function (track) {
+              return track.id === id;
+            })[0] || null
+          );
+        }
+
+        // รหัสแถวเสียงทั้งหมดตามลำดับในตาราง TRACKS
+        function allTrackIds() {
+          return TRACKS.map(function (track) {
+            return track.id;
+          });
+        }
+
+        // ค่าสีของแถวเสียงในรูป CSS (ถ้าไม่มีตัวแปรสีนั้นใช้สีฟ้า)
+        function colorFor(track) {
+          return 'var(' + track.colorVar + ', var(--blue))';
+        }
+
+        // จอกว้างพอให้เวลาไหลไปทางขวาหรือไม่
+        function isWide() {
+          return typeof window.matchMedia === 'function' && window.matchMedia('(min-width: 720px)').matches;
+        }
+
+        // จำนวนช่องในหนึ่งห้อง
+        function stepCount() {
+          return grid.beats * CONFIG.stepsPerBeat;
+        }
+
+        // ระดับที่เลือกอยู่
+        function currentLevel() {
+          return (
+            LEVELS.filter(function (level) {
+              return level.id === settings.level;
+            })[0] || LEVELS[0]
+          );
+        }
+
+        // ตรวจว่าโหมดและระดับที่เก็บไว้ยังใช้ได้ ถ้าไม่ได้ใช้ค่าเริ่มต้น
+        function validateChoices() {
+          if (!MODES.some(function (mode) { return mode.id === settings.mode; })) settings.mode = 'free';
+          if (!LEVELS.some(function (level) { return level.id === settings.level; })) settings.level = LEVELS[0].id;
+        }
+
+        // ความเร็วที่อยู่ในช่วงของแถบเลื่อน
+        function clampBpm(value) {
+          var number = Number(value);
+          if (!isFinite(number)) return CONFIG.bpmDefault;
+          return Math.max(CONFIG.bpmMin, Math.min(CONFIG.bpmMax, Math.round(number)));
+        }
+
+        // เก็บจังหวะที่ผู้เล่นสร้างเอง (เฉพาะโหมดสร้างเอง)
+        function saveFreePattern() {
+          if (game && game.mode === 'free') write(STORE.pattern, Core.gridToSaved(grid, bpm));
+        }
+
+        // ระบายสีและข้อความของช่องหนึ่งช่องให้ตรงกับตาราง
+        function renderCell(id, step) {
+          var node = cellEls[id + ':' + step];
+          if (!node) return;
+          var on = grid.rows[id][step] === true;
+          var mark = marks[id + ':' + step] || '';
+          node.classList.toggle('is-on', on);
+          node.classList.toggle('is-extra', mark === 'extra');
+          node.classList.toggle('is-missing', mark === 'missing');
+          node.setAttribute('aria-pressed', on ? 'true' : 'false');
+          var text = mark === 'extra' ? TEXT.markExtra : mark === 'missing' ? TEXT.markMissing : on ? '●' : '';
+          node.querySelector('.cell-mark').textContent = text;
+          var label = t('cellLabel', {
+            track: trackById(id).label,
+            count: Core.stepName(step, CONFIG.stepsPerBeat, COUNT_SYLLABLES),
+            state: on ? TEXT.cellOn : TEXT.cellOff
+          });
+          node.setAttribute('aria-label', mark ? label + ' · ' + text : label);
+        }
+
+        // วาดทุกช่องใหม่
+        function renderCells() {
+          trackIds.forEach(function (id) {
+            for (var step = 0; step < stepCount(); step++) renderCell(id, step);
+          });
+        }
+
+        // ย้ายจุดที่ปุ่มแท็บเข้าถึงไปที่ช่องหนึ่ง
+        function setFocusCell(trackIndex, step) {
+          focusTrack = trackIndex;
+          focusStep = step;
+          Object.keys(cellEls).forEach(function (key) {
+            cellEls[key].setAttribute('tabindex', '-1');
+          });
+          var node = cellEls[trackIds[trackIndex] + ':' + step];
+          if (node) node.setAttribute('tabindex', '0');
+        }
+
+        // สร้างตารางใหม่ทั้งหมดตามแถวเสียงและจำนวนจังหวะ (โครงเดียว จอแคบกับจอกว้างต่างกันแค่ CSS)
+        function buildGrid() {
+          var host = byId('grid');
+          host.textContent = '';
+          cellEls = {};
+          labelEls = [];
+          nowStep = -1;
+          var perBeat = CONFIG.stepsPerBeat;
+          var steps = stepCount();
+          host.style.setProperty('--tracks', trackIds.length);
+          host.style.setProperty('--steps', steps);
+          host.appendChild(el('div', { class: 'grid-corner' }));
+          trackIds.forEach(function (id, index) {
+            var track = trackById(id);
+            var style = '--t:' + index + ';--track-color:' + colorFor(track);
+            host.appendChild(el('div', { class: 'track-head', style: style, text: track.label }));
+          });
+          for (var step = 0; step < steps; step++) {
+            var beatStart = step % perBeat === 0;
+            var labelText = beatStart ? String(step / perBeat + 1) : COUNT_SYLLABLES[step % perBeat];
+            var label = el('div', {
+              class: 'step-label' + (beatStart ? ' is-beat' : ''),
+              style: '--s:' + step,
+              'aria-hidden': 'true',
+              text: labelText
+            });
+            labelEls.push(label);
+            host.appendChild(label);
+            trackIds.forEach(function (id, index) {
+              var style = '--s:' + step + ';--t:' + index + ';--track-color:' + colorFor(trackById(id));
+              var cell = el('button', {
+                type: 'button',
+                class: 'cell' + (beatStart ? ' is-beat' : ''),
+                style: style,
+                tabindex: '-1',
+                'data-track': id,
+                'data-step': step
+              }, [el('span', { class: 'cell-mark', 'aria-hidden': 'true' })]);
+              cell.addEventListener('click', function () {
+                toggleCell(id, Number(cell.getAttribute('data-step')));
+              });
+              cellEls[id + ':' + step] = cell;
+              host.appendChild(cell);
+            });
+          }
+          setFocusCell(Math.min(focusTrack, trackIds.length - 1), Math.min(focusStep, steps - 1));
+          renderCells();
+        }
+
+        // ใช้ปุ่มลูกศรเลื่อนระหว่างช่อง (ทิศของเวลาเปลี่ยนตามขนาดจอ)
+        function onGridKey(event) {
+          var wide = isWide();
+          var dTrack = 0;
+          var dStep = 0;
+          if (event.key === 'ArrowRight') {
+            if (wide) dStep = 1;
+            else dTrack = 1;
+          } else if (event.key === 'ArrowLeft') {
+            if (wide) dStep = -1;
+            else dTrack = -1;
+          } else if (event.key === 'ArrowDown') {
+            if (wide) dTrack = 1;
+            else dStep = 1;
+          } else if (event.key === 'ArrowUp') {
+            if (wide) dTrack = -1;
+            else dStep = -1;
+          } else {
+            return;
+          }
+          event.preventDefault();
+          var nextTrack = Math.max(0, Math.min(trackIds.length - 1, focusTrack + dTrack));
+          var nextStep = Math.max(0, Math.min(stepCount() - 1, focusStep + dStep));
+          setFocusCell(nextTrack, nextStep);
+          cellEls[trackIds[nextTrack] + ':' + nextStep].focus();
+        }
+
+        // แตะช่อง: วางหรือเอาเสียงออก
+        function toggleCell(id, step) {
+          if (!game || locked) return;
+          initAudio();
+          var index = trackIds.indexOf(id);
+          setFocusCell(index, step);
+          grid = Core.toggle(grid, id, step);
+          delete marks[id + ':' + step];
+          renderCell(id, step);
+          var on = grid.rows[id][step] === true;
+          if (on && !playback) playHit(id, 0);
+          emit('cellToggle', { trackId: id, step: step, on: on });
+          if (game.mode === 'free') {
+            freeDirty = true;
+            presetId = '';
+            byId('presets').value = '';
+            byId('presetAbout').textContent = '';
+            saveFreePattern();
+            renderStrip();
+          }
+        }
+
+        // ล้างเครื่องหมายเกิน/ขาดทั้งตาราง
+        function clearMarks() {
+          marks = {};
+          byId('roundCheck').textContent = '';
+          byId('roundCheck').className = 'round-check';
+        }
+
+        // ไฮไลต์ช่องที่กำลังเล่น (ถ้าไม่มี step = -1)
+        function showPlayhead(step) {
+          if (nowStep >= 0) {
+            if (labelEls[nowStep]) labelEls[nowStep].classList.remove('is-now');
+            trackIds.forEach(function (id) {
+              var old = cellEls[id + ':' + nowStep];
+              if (old) old.classList.remove('is-now');
+            });
+          }
+          nowStep = step;
+          if (step < 0) return;
+          if (labelEls[step]) labelEls[step].classList.add('is-now');
+          trackIds.forEach(function (id) {
+            var node = cellEls[id + ':' + step];
+            if (node) node.classList.add('is-now');
+          });
+        }
+
+        // ให้ช่องที่เพิ่งส่งเสียงกะพริบชั่วครู่
+        function flashHit(id, step) {
+          var node = cellEls[id + ':' + step];
+          if (!node) return;
+          var key = id + ':' + step;
+          clearTimeout(hitTimers[key]);
+          node.classList.add('is-hit');
+          hitTimers[key] = setTimeout(function () {
+            node.classList.remove('is-hit');
+          }, CONFIG.hitFlashMs);
+        }
+
+        // เสียงสุ่มขาวยาวหนึ่งวินาที สร้างด้วยโค้ดหนึ่งครั้งต่อเครื่องเสียง (ไม่ใช้ไฟล์เสียง)
+        function getNoise() {
+          if (noiseBuffer && noiseOwner === audio) return noiseBuffer;
+          noiseBuffer = audio.createBuffer(1, audio.sampleRate, audio.sampleRate);
+          var data = noiseBuffer.getChannelData(0);
+          for (var i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+          noiseOwner = audio;
+          return noiseBuffer;
+        }
+
+        // ซองเสียงของกลองหนึ่งครั้ง: ขึ้นเร็วมาก แล้วลดลงจนเงียบ ต่อเข้าเครื่องเสียงหลัก
+        function drumEnvelope(start, decay, peak) {
+          var gain = audio.createGain();
+          gain.gain.setValueAtTime(0, start);
+          gain.gain.linearRampToValueAtTime(peak, start + 0.002);
+          gain.gain.linearRampToValueAtTime(0, start + decay);
+          gain.connect(master);
+          return gain;
+        }
+
+        // เล่นเสียงกลองของแถวหนึ่ง (whenSec คือวินาทีนับจากตอนนี้) ทำงานได้เมื่อมีเครื่องเสียงเท่านั้น
+        function playHit(trackId, whenSec) {
+          if (!audio || !master) return;
+          var track = trackById(trackId);
+          if (!track) return;
+          try {
+            var start = audio.currentTime + (whenSec || 0);
+            var decay = track.decaySec || 0.1;
+            var level = settings.volume / 100;
+            if (track.kind === 'kick') {
+              var kick = audio.createOscillator();
+              kick.type = 'sine';
+              kick.frequency.setValueAtTime(track.hz, start);
+              kick.frequency.exponentialRampToValueAtTime(track.endHz || 40, start + decay);
+              kick.connect(drumEnvelope(start, decay, level));
+              kick.start(start);
+              kick.stop(start + decay + 0.02);
+            } else if (track.kind === 'noise') {
+              var source = audio.createBufferSource();
+              source.buffer = getNoise();
+              var filter = audio.createBiquadFilter();
+              filter.type = track.filterHz >= 4000 ? 'highpass' : 'bandpass';
+              filter.frequency.value = track.filterHz;
+              source.connect(filter);
+              filter.connect(drumEnvelope(start, decay, level));
+              source.start(start);
+              source.stop(start + decay + 0.02);
+              if (track.toneHz) {
+                var body = audio.createOscillator();
+                body.type = 'triangle';
+                body.frequency.value = track.toneHz;
+                body.connect(drumEnvelope(start, decay, level / 2));
+                body.start(start);
+                body.stop(start + decay + 0.02);
+              }
+            } else {
+              var tone = audio.createOscillator();
+              tone.type = 'triangle';
+              tone.frequency.value = track.hz;
+              tone.connect(drumEnvelope(start, decay, level));
+              tone.start(start);
+              tone.stop(start + decay + 0.02);
+            }
+          } catch (e) {
+            /* เล่นเสียงไม่ได้ก็เล่นเกมต่อแบบเงียบ */
+          }
+        }
+
+        // เล่นตารางตามเวลาจริง ตั้งเสียงล่วงหน้าเล็กน้อยและเลื่อนไฮไลต์เมื่อถึงเวลา
+        // เวลาอ้างอิงคือ performance.now ไม่ใช่นาฬิกาเสียง ถ้าไม่มีเสียงก็ยังเดินครบ
+        // source คือ 'mine' (ตารางของผู้เล่น วนไม่รู้จบ) หรือ 'target' (โจทย์ เล่น loops ห้อง)
+        function startPlayback(source, getGrid, loops, done) {
+          stopPlayback('restart');
+          var first = getGrid();
+          playback = {
+            source: source,
+            getGrid: getGrid,
+            loops: loops,
+            done: done,
+            stepMs: Core.stepMs(bpm, CONFIG.stepsPerBeat),
+            startMs: performance.now(),
+            soundNext: 0,
+            tickNext: 0
+          };
+          emit('playStart', { source: source, bpm: bpm, beats: first.beats });
+          updateTransport();
+          frameId = requestAnimationFrame(playbackFrame);
+        }
+
+        // ทุกเฟรมของการเล่น
+        function playbackFrame() {
+          if (!playback) return;
+          var p = playback;
+          var elapsed = performance.now() - p.startMs;
+          var current = p.getGrid();
+          var steps = current.beats * CONFIG.stepsPerBeat;
+          var total = p.loops ? p.loops * steps : Infinity;
+          function timeOf(n) {
+            return n * p.stepMs;
+          }
+          while (p.soundNext < total && timeOf(p.soundNext) + CONFIG.maxLateMs < elapsed) p.soundNext += 1;
+          while (p.tickNext < total && timeOf(p.tickNext) + CONFIG.maxLateMs < elapsed) p.tickNext += 1;
+          var horizon = elapsed + CONFIG.lookaheadMs;
+          var due = [];
+          while (p.soundNext < total && timeOf(p.soundNext) <= horizon) {
+            due.push(p.soundNext);
+            p.soundNext += 1;
+          }
+          var late = due.filter(function (n) {
+            return timeOf(n) < elapsed;
+          });
+          due.forEach(function (n) {
+            if (late.length > 1 && timeOf(n) < elapsed && n !== late[late.length - 1]) return;
+            var when = Math.max(0, (timeOf(n) - elapsed) / 1000);
+            Core.hitsAt(current, n % steps).forEach(function (id) {
+              playHit(id, when);
+            });
+          });
+          while (p.tickNext < total && timeOf(p.tickNext) <= elapsed) {
+            tickStep(p, current, steps, p.tickNext);
+            p.tickNext += 1;
+          }
+          if (elapsed >= timeOf(total)) {
+            stopPlayback('end');
+          } else {
+            frameId = requestAnimationFrame(playbackFrame);
+          }
+        }
+
+        // ถึงเวลาของช่องที่ n: เลื่อนไฮไลต์ กะพริบช่องที่ส่งเสียง และส่งเหตุการณ์
+        function tickStep(p, current, steps, n) {
+          var step = n % steps;
+          if (step === 0 && n > 0) emit('loopEnd', { loops: n / steps });
+          var hits = Core.hitsAt(current, step);
+          showPlayhead(step);
+          if (p.source === 'mine') {
+            hits.forEach(function (id) {
+              flashHit(id, step);
+            });
+          }
+          emit('stepTick', {
+            step: step,
+            beat: Math.floor(step / CONFIG.stepsPerBeat) + 1,
+            isBeatStart: step % CONFIG.stepsPerBeat === 0,
+            hits: hits
+          });
+        }
+
+        // หยุดการเล่น reason คือ 'end' (เล่นครบ) 'stop' (ผู้เล่นหยุด) หรือ 'restart' (กำลังจะเริ่มใหม่)
+        function stopPlayback(reason) {
+          if (!playback) return;
+          var p = playback;
+          cancelAnimationFrame(frameId);
+          playback = null;
+          showPlayhead(-1);
+          if (reason === 'end' && p.loops) emit('loopEnd', { loops: p.loops });
+          if (reason !== 'restart') emit('playStop', { source: p.source });
+          updateTransport();
+          if (reason === 'end' && p.done) p.done();
+        }
+
+        // ปรับปุ่มเล่น/หยุดและข้อความความเร็ว
+        function updateTransport() {
+          var playing = Boolean(playback);
+          var mineOn = playing && playback.source === 'mine';
+          byId('playMine').textContent = mineOn ? TEXT.btnStop : TEXT.btnPlayMine;
+          byId('playMine').setAttribute('aria-pressed', mineOn ? 'true' : 'false');
+          byId('tempoText').textContent = t('tempoLabel', { bpm: bpm });
+          var slider = byId('tempo');
+          slider.value = bpm;
+        }
+
+        // เปลี่ยนความเร็วระหว่างเล่นโดยไม่ให้ช่องกระโดด
+        function retime() {
+          if (!playback) return;
+          playback.stepMs = Core.stepMs(bpm, CONFIG.stepsPerBeat);
+          playback.startMs = performance.now() - playback.tickNext * playback.stepMs;
+          playback.soundNext = playback.tickNext;
+        }
+
+        // ปุ่ม ฟังของฉัน / หยุด
+        function toggleMine() {
+          initAudio();
+          if (playback && playback.source === 'mine') {
+            stopPlayback('stop');
+            return;
+          }
+          if (game && game.mode === 'free') notePlayed();
+          startPlayback('mine', function () {
+            return grid;
+          }, 0, null);
+        }
+
+        // เล่นจังหวะที่สร้างเองครั้งแรกหลังแก้: นับสถิติและตรวจเหรียญนักแต่งจังหวะ
+        function notePlayed() {
+          var used = Core.usedTracks(grid);
+          if (!freeDirty || !used.length) return;
+          freeDirty = false;
+          stats.freePlays += 1;
+          saveStats();
+          awardBadges({ mode: 'free', tracksUsed: used.length });
+        }
+
+        // วาดบรรทัดวิธีนับของทุกแถวที่มีเสียง ใส่ลงในกล่องที่ระบุ
+        function fillCountingLines(box, rows, emptyText) {
+          box.textContent = '';
+          var any = false;
+          Object.keys(rows).forEach(function (id) {
+            var track = trackById(id);
+            var text = Core.countingText(rows[id], CONFIG.stepsPerBeat, COUNT_SYLLABLES);
+            if (!track || !text) return;
+            any = true;
+            box.appendChild(el('p', { class: 'row-line', text: track.label + ': ' + text }));
+          });
+          if (!any && emptyText) box.appendChild(el('p', { class: 'soft', text: emptyText }));
+        }
+
+        // วาดแถบวิธีนับของโหมดสร้างเอง ตามตารางตอนนี้
+        function renderStrip() {
+          fillCountingLines(byId('stripLines'), grid.rows, TEXT.countingEmpty);
+        }
+
+        // เปิดหน้าเล่นสำหรับโหมดที่เลือก (ยังไม่เริ่มข้อใด)
+        function openPlay(mode, level) {
+          stopPlayback('stop');
+          game = {
+            mode: mode,
+            levelId: level.id,
+            level: level,
+            score: 0,
+            streak: 0,
+            index: 0,
+            failed: 0,
+            revealed: false,
+            solved: false,
+            results: [],
+            rounds: [],
+            groove: null,
+            target: null
+          };
+          locked = false;
+          marks = {};
+          var free = mode === 'free';
+          byId('playTitle').textContent = MODES.filter(function (item) {
+            return item.id === mode;
+          })[0].label;
+          byId('hud').hidden = free;
+          byId('freeControls').hidden = !free;
+          byId('countingStrip').hidden = !free;
+          byId('countingCard').hidden = mode !== 'read';
+          byId('grooveCard').hidden = true;
+          byId('playTarget').hidden = mode !== 'copy';
+          byId('checkBtn').hidden = free;
+          byId('revealBtn').hidden = free;
+          byId('nextBtn').hidden = true;
+          byId('tempo').hidden = !free;
+          byId('roundCheck').textContent = '';
+          byId('roundCheck').className = 'round-check';
+          byId('tempo').min = CONFIG.bpmMin;
+          byId('tempo').max = CONFIG.bpmMax;
+          byId('tempo').step = CONFIG.bpmStep;
+          showScreen('play');
+        }
+
+        // โหมดสร้างเอง: โหลดจังหวะที่เก็บไว้ ถ้าไม่มีหรือเสียหายใช้ตารางว่าง
+        function startFree(groove) {
+          openPlay('free', currentLevel());
+          trackIds = allTrackIds();
+          var saved = read(STORE.pattern, null);
+          var restored = Core.gridFromSaved(saved, trackIds, CONFIG.stepsPerBeat);
+          grid = restored || Core.emptyGrid(trackIds, 4, CONFIG.stepsPerBeat);
+          bpm = restored && saved && isFinite(Number(saved.bpm)) ? clampBpm(saved.bpm) : CONFIG.bpmDefault;
+          freeDirty = false;
+          presetId = '';
+          buildGrid();
+          renderMetres();
+          renderPresets();
+          renderStrip();
+          updateTransport();
+          emit('gameStart', { mode: 'free', level: game.levelId, rounds: 0 });
+          if (groove) loadGroove(groove);
+        }
+
+        // โหลดจังหวะตัวอย่างลงตาราง (พร้อมความเร็วของมัน) ในโหมดสร้างเอง
+        function loadGroove(groove) {
+          stopPlayback('stop');
+          grid = Core.gridFromGroove(groove, trackIds, CONFIG.stepsPerBeat);
+          bpm = clampBpm(groove.bpm);
+          freeDirty = false;
+          presetId = groove.id;
+          marks = {};
+          buildGrid();
+          renderMetres();
+          renderStrip();
+          byId('presets').value = groove.id;
+          byId('presetAbout').textContent = groove.about;
+          updateTransport();
+          saveFreePattern();
+        }
+
+        // วาดปุ่มสลับ 4/4 และ 3/4
+        function renderMetres() {
+          var box = byId('metres');
+          box.textContent = '';
+          [[4, 'metre44'], [3, 'metre34']].forEach(function (pair) {
+            var pressed = grid.beats === pair[0] ? 'true' : 'false';
+            var button = el('button', { type: 'button', 'aria-pressed': pressed, text: TEXT[pair[1]] });
+            button.addEventListener('click', function () {
+              if (grid.beats === pair[0]) return;
+              stopPlayback('stop');
+              grid = Core.resize(grid, pair[0], CONFIG.stepsPerBeat);
+              marks = {};
+              freeDirty = true;
+              buildGrid();
+              renderMetres();
+              renderStrip();
+              saveFreePattern();
+            });
+            box.appendChild(button);
+          });
+        }
+
+        // วาดรายการจังหวะตัวอย่างทุกอันเป็นตัวเลือก
+        function renderPresets() {
+          var select = byId('presets');
+          select.textContent = '';
+          select.appendChild(el('option', { value: '', text: TEXT.presetLabel }));
+          validGrooves().forEach(function (groove) {
+            select.appendChild(el('option', { value: groove.id, text: groove.name }));
+          });
+          select.value = presetId;
+          byId('presetAbout').textContent = '';
+        }
+
+        // โจทย์ของข้อปัจจุบัน
+        function startRound() {
+          var groove = game.rounds[game.index];
+          game.groove = groove;
+          trackIds = allTrackIds().filter(function (id) {
+            return typeof groove.rows[id] === 'string';
+          });
+          grid = Core.emptyGrid(trackIds, groove.beats, CONFIG.stepsPerBeat);
+          game.target = Core.gridFromGroove(groove, trackIds, CONFIG.stepsPerBeat);
+          bpm = clampBpm(groove.bpm);
+          game.failed = 0;
+          game.revealed = false;
+          game.solved = false;
+          locked = false;
+          marks = {};
+          stopPlayback('stop');
+          byId('grooveCard').hidden = true;
+          byId('nextBtn').hidden = true;
+          byId('checkBtn').disabled = false;
+          byId('revealBtn').disabled = false;
+          byId('roundCheck').textContent = '';
+          byId('roundCheck').className = 'round-check';
+          if (game.mode === 'read') {
+            var rows = {};
+            trackIds.forEach(function (id) {
+              rows[id] = game.target.rows[id];
+            });
+            fillCountingLines(byId('countingLines'), rows, '');
+          }
+          buildGrid();
+          updateTransport();
+          renderHud();
+          emit('roundStart', { index: game.index, grooveId: groove.id, mode: game.mode });
+        }
+
+        // ปรับตัวเลขบนแถบแสดงผลระหว่างเล่น
+        function renderHud() {
+          if (!game || game.mode === 'free') return;
+          byId('hudScore').textContent = String(game.score);
+          byId('hudStreak').textContent = game.streak >= 1 ? t('hudStreak', { n: game.streak }) : '';
+          byId('hudRound').textContent = t('roundLabel', { i: game.index + 1, n: game.rounds.length });
+        }
+
+        // เริ่มเกมโหมดโจทย์: เลือกจังหวะตามระดับแล้วเริ่มข้อแรก
+        function newGame(mode, levelId) {
+          initAudio();
+          var level = LEVELS.filter(function (item) {
+            return item.id === levelId;
+          })[0] || LEVELS[0];
+          openPlay(mode, level);
+          var rng = Core.makeRng(CONFIG.seed || Date.now());
+          game.rounds = Core.pickRounds(validGrooves(), level, CONFIG.roundsPerGame, rng);
+          if (!game.rounds.length) {
+            returnHome();
+            return;
+          }
+          emit('gameStart', { mode: mode, level: level.id, rounds: game.rounds.length });
+          startRound();
+        }
+
+        // เสียงดีใจสั้น ๆ เมื่อเรียงถูก
+        function successSound() {
+          [523, 659, 784].forEach(function (hz, index) {
+            playTone(hz, 0.16, index * 0.09);
+          });
+        }
+
+        // ปุ่มตรวจ: เทียบตารางของผู้เล่นกับโจทย์
+        function checkRound() {
+          if (!game || locked || game.mode === 'free') return;
+          initAudio();
+          stopPlayback('stop');
+          var result = Core.compare(grid, game.target);
+          clearMarks();
+          var line = byId('roundCheck');
+          if (result.perfect) {
+            var streakNow = game.failed === 0 ? game.streak + 1 : game.streak;
+            emit('roundCheck', { perfect: true, missing: 0, extra: 0, failedChecks: game.failed });
+            var points = Core.roundScore(game.failed, false, streakNow, CONFIG);
+            game.streak = game.failed === 0 ? game.streak + 1 : 0;
+            game.score += points;
+            line.textContent = TEXT.checkPerfect;
+            line.className = 'round-check is-pass';
+            successSound();
+            emit('scoreChange', { score: game.score, delta: points, streak: game.streak });
+            popScore(byId('hudScoreBox'), points);
+            finishRound(points, false);
+            return;
+          }
+          game.failed += 1;
+          result.missing.forEach(function (item) {
+            marks[item.trackId + ':' + item.step] = 'missing';
+          });
+          result.extra.forEach(function (item) {
+            marks[item.trackId + ':' + item.step] = 'extra';
+          });
+          renderCells();
+          line.textContent = t('checkResult', { extra: result.extra.length, missing: result.missing.length });
+          line.className = 'round-check is-fail';
+          emit('roundCheck', {
+            perfect: false,
+            missing: result.missing.length,
+            extra: result.extra.length,
+            failedChecks: game.failed
+          });
+          playTone(147, 0.2, 0, 'square');
+        }
+
+        // ดูเฉลย: ใส่คำตอบลงตาราง ข้อนี้ได้ 0 คะแนน
+        function revealRound() {
+          if (!game || locked || game.mode === 'free') return;
+          stopPlayback('stop');
+          clearMarks();
+          grid = Core.copyGrid(game.target);
+          game.revealed = true;
+          game.streak = 0;
+          renderCells();
+          finishRound(0, true);
+        }
+
+        // ข้อนี้จบแล้ว (ผ่านหรือดูเฉลย): ล็อกตาราง แสดงการ์ดจังหวะ เล่นจังหวะนั้นหนึ่งรอบ และรอผู้เล่นกดต่อไป
+        function finishRound(points, revealed) {
+          locked = true;
+          game.solved = true;
+          game.results.push({
+            grooveId: game.groove.id,
+            failedChecks: game.failed,
+            revealed: revealed,
+            points: points
+          });
+          emit('roundEnd', { grooveId: game.groove.id, points: points, failedChecks: game.failed, revealed: revealed });
+          byId('countingCard').hidden = true;
+          byId('checkBtn').disabled = true;
+          byId('revealBtn').disabled = true;
+          byId('grooveName').textContent = t('grooveCardTitle', { name: game.groove.name });
+          byId('grooveAbout').textContent = game.groove.about;
+          byId('grooveBeats').textContent = t('grooveBeatsLine', { beats: game.groove.beats, bpm: game.groove.bpm });
+          var full = Core.gridFromGroove(game.groove, allTrackIds(), CONFIG.stepsPerBeat);
+          fillCountingLines(byId('grooveLines'), full.rows, '');
+          byId('grooveCard').hidden = false;
+          byId('nextBtn').hidden = false;
+          byId('nextBtn').focus();
+          renderHud();
+          if (audio) {
+            var played = game.target;
+            startPlayback('target', function () {
+              return played;
+            }, 1, null);
+          }
+        }
+
+        // ปุ่มต่อไป: ข้อถัดไป หรือจบเกมถ้าเป็นข้อสุดท้าย
+        function nextRound() {
+          if (!game || !game.solved) return;
+          if (game.index + 1 >= game.rounds.length) {
+            endGame();
+            return;
+          }
+          game.index += 1;
+          startRound();
+        }
+
+        // จบเกมโหมดโจทย์: คำนวณผล บันทึกสถิติ ให้เหรียญ แจ้งเหตุการณ์ และแสดงหน้าสรุป
+        function endGame() {
+          stopPlayback('stop');
+          var rounds = game.results.map(function (item) {
+            return { grooveId: item.grooveId, failedChecks: item.failedChecks, revealed: item.revealed };
+          });
+          var result = {
+            mode: game.mode,
+            level: game.levelId,
+            score: game.score,
+            stars: Core.stars(rounds),
+            rounds: rounds
+          };
+          game.results.forEach(function (item) {
+            if (!item.revealed && stats.solved.indexOf(item.grooveId) === -1) stats.solved.push(item.grooveId);
+          });
+          var bestKey = game.mode + ':' + game.levelId;
+          var newBest = Core.isBetter(result, stats.best[bestKey]);
+          if (newBest) stats.best[bestKey] = { score: result.score, stars: result.stars };
+          saveStats();
+          awardBadges(result);
+          lastResult = { result: result, newBest: newBest, game: game };
+          emit('gameEnd', result);
+          renderResult();
+          showScreen('result');
+        }
+
+        // ดาวเป็นข้อความ ไม่ใช้สีหรือรูปอย่างเดียว
+        function starsText(count) {
+          return count >= 3 ? TEXT.stars3 : count === 2 ? TEXT.stars2 : TEXT.stars1;
+        }
+
+        // วาดหน้าสรุปผลของเกมที่เพิ่งจบ
+        function renderResult() {
+          var info = lastResult;
+          var result = info.result;
+          byId('resultHeading').textContent = TEXT.resultCopy;
+          var body = byId('resultBody');
+          body.textContent = '';
+          var scoreLine = el('p', { class: 'result-score', id: 'resultScore' });
+          body.appendChild(scoreLine);
+          function statLine(text) {
+            body.appendChild(el('p', { class: 'stat-line', text: text }));
+          }
+          var firstTries = result.rounds.filter(function (round) {
+            return round.failedChecks === 0 && !round.revealed;
+          }).length;
+          var checks = result.rounds.reduce(function (sum, round) {
+            return sum + round.failedChecks + (round.revealed ? 0 : 1);
+          }, 0);
+          var revealed = result.rounds.filter(function (round) {
+            return round.revealed;
+          }).length;
+          statLine(t('statStars', { stars: starsText(result.stars) }));
+          statLine(t('statFirstTry', { n: firstTries }));
+          statLine(t('statChecks', { n: checks }));
+          statLine(t('statRevealed', { n: revealed }));
+          if (info.newBest) body.appendChild(el('p', { class: 'new-best', text: TEXT.newBest }));
+          body.appendChild(el('h2', { text: TEXT.grooveListTitle }));
+          var list = el('ul', { class: 'result-groove-list' });
+          result.rounds.forEach(function (round) {
+            var groove = GROOVES.filter(function (item) {
+              return item.id === round.grooveId;
+            })[0];
+            var status = round.revealed
+              ? TEXT.rowRevealed
+              : round.failedChecks === 0
+                ? TEXT.rowFirstTry
+                : t('rowAfterChecks', { n: round.failedChecks });
+            var kids = [el('span', { text: groove.name + ' · ' + status })];
+            if (round.revealed || round.failedChecks > 0) {
+              var retry = el('button', { type: 'button', text: TEXT.btnRetryFree });
+              retry.addEventListener('click', function () {
+                startFree(groove);
+              });
+              kids.push(retry);
+            }
+            list.appendChild(el('li', {}, kids));
+          });
+          body.appendChild(list);
+          countUp(scoreLine, result.score);
+          revealRows(body);
+        }
+
+        // สร้างข้อความสถิติที่ดีที่สุดของโหมดและระดับที่เลือกบนหน้าแรก
+        function bestText() {
+          if (settings.mode === 'free') return '';
+          var best = stats.best[settings.mode + ':' + settings.level];
+          if (!best || typeof best !== 'object') return TEXT.bestNone;
+          return t('bestLine', { value: best.score });
+        }
+
+        // วาดหน้าแรก: โหมด ระดับ สถิติ และเหรียญ
+        function renderHome() {
+          validateChoices();
+          var audioOk = audioAvailable();
+          var modes = byId('modes');
+          modes.textContent = '';
+          MODES.forEach(function (mode) {
+            var blocked = mode.needsSound && !audioOk;
+            var pressed = mode.id === settings.mode ? 'true' : 'false';
+            var button = el('button', { type: 'button', 'aria-pressed': pressed }, [
+              el('strong', { text: mode.label }),
+              el('small', { text: mode.about })
+            ]);
+            if (blocked) button.setAttribute('aria-disabled', 'true');
+            button.addEventListener('click', function () {
+              if (blocked) {
+                byId('earNotice').textContent = TEXT.audioNeeded;
+                return;
+              }
+              byId('earNotice').textContent = '';
+              settings.mode = mode.id;
+              saveSettings();
+              renderHome();
+            });
+            modes.appendChild(button);
+          });
+          var levels = byId('levels');
+          levels.textContent = '';
+          LEVELS.forEach(function (level) {
+            var pressed = level.id === settings.level ? 'true' : 'false';
+            var button = el('button', { type: 'button', 'aria-pressed': pressed, text: level.label });
+            button.addEventListener('click', function () {
+              settings.level = level.id;
+              saveSettings();
+              renderHome();
+            });
+            levels.appendChild(button);
+          });
+          byId('levelBlock').hidden = settings.mode === 'free';
+          byId('homeBest').textContent = bestText();
+          byId('solvedLine').textContent = t('solvedLine', {
+            n: stats.solved.filter(function (id) {
+              return validGrooves().some(function (groove) {
+                return groove.id === id;
+              });
+            }).length,
+            m: validGrooves().length
+          });
+          renderMedals();
+        }
+
+        // กลับหน้าแรก และหยุดทุกอย่างที่ค้างอยู่
+        function returnHome() {
+          stopPlayback('stop');
+          game = null;
+          renderHome();
+          showScreen('home');
+        }
+
+        // ไปหน้าที่ระบุ (ใช้ได้เฉพาะหน้าที่เปิดได้ในขณะนั้น) คืนค่าจริงถ้าสำเร็จ
+        function goTo(name) {
+          if (name === 'home') {
+            returnHome();
+            return true;
+          }
+          if (name === 'howto' || name === 'badges') {
+            showScreen(name);
+            return true;
+          }
+          if ((name === 'play' && game) || (name === 'result' && lastResult)) {
+            showScreen(name);
+            return true;
+          }
+          return false;
+        }
+
+        // ล้างข้อมูลเสร็จแล้ว ให้หน้าจอกลับไปเป็นค่าเริ่มต้น
+        function resetAfterClear() {
+          byId('volume').value = settings.volume;
+          byId('theme').value = settings.theme;
+          byId('reduce').checked = settings.reduceMotion;
+          lastResult = null;
+          renderHome();
+        }
+
+        // สำเนาตารางตอนนี้
+        function getGrid() {
+          return grid ? Core.copyGrid(grid) : null;
+        }
+
+        // ใส่ตารางใหม่ (โหมดสร้างเองเท่านั้น) คืนค่าจริงถ้าใส่ได้ ตารางที่รูปแบบผิดจะถูกปฏิเสธ
+        function setGrid(next) {
+          if (!game || game.mode !== 'free' || locked) return false;
+          var shapeOk = next && (next.beats === 3 || next.beats === 4) && next.rows && typeof next.rows === 'object';
+          if (!shapeOk) return false;
+          var length = next.beats * CONFIG.stepsPerBeat;
+          var fresh = Core.emptyGrid(trackIds, next.beats, CONFIG.stepsPerBeat);
+          trackIds.forEach(function (id) {
+            var row = next.rows[id];
+            if (!Array.isArray(row)) return;
+            for (var step = 0; step < length; step++) fresh.rows[id][step] = row[step] === true;
+          });
+          var changedBeats = next.beats !== grid.beats;
+          if (changedBeats) stopPlayback('stop');
+          grid = fresh;
+          marks = {};
+          freeDirty = true;
+          if (changedBeats) {
+            buildGrid();
+            renderMetres();
+          } else {
+            renderCells();
+          }
+          renderStrip();
+          saveFreePattern();
+          return true;
+        }
+
+        // ตั้งความเร็ว (โหมดสร้างเองเท่านั้น) ไม่เกินช่วงของแถบเลื่อน คืนค่าจริงถ้าตั้งได้
+        function setBpm(value) {
+          if (!game || game.mode !== 'free') return false;
+          bpm = clampBpm(value);
+          retime();
+          updateTransport();
+          saveFreePattern();
+          return true;
+        }
+
+        // สำเนาสถานะปัจจุบันของเกม (อ่านอย่างเดียว)
+        function getState() {
+          var view = { screen: activeScreen, playing: Boolean(playback), bpm: bpm };
+          if (game) {
+            view.mode = game.mode;
+            view.level = game.levelId;
+            view.score = game.score;
+            view.streak = game.streak;
+            view.index = game.index;
+            view.rounds = game.rounds.length;
+            view.failedChecks = game.failed;
+            view.solved = game.solved;
+            view.beats = grid ? grid.beats : null;
+            view.grooveId = game.groove ? game.groove.id : null;
+          }
+          return view;
+        }
+
+        // ผูกปุ่มทั้งหมดของเกม
+        function bindControls() {
+          bindSharedControls();
+          byId('grid').addEventListener('keydown', onGridKey);
+          byId('startPlay').addEventListener('click', function () {
+            initAudio();
+            var mode = MODES.filter(function (item) {
+              return item.id === settings.mode;
+            })[0];
+            if (mode.needsSound && !audio) {
+              byId('earNotice').textContent = TEXT.audioNeeded;
+              return;
+            }
+            byId('earNotice').textContent = '';
+            if (mode.id === 'free') startFree(null);
+            else newGame(mode.id, settings.level);
+          });
+          byId('playMine').addEventListener('click', toggleMine);
+          byId('playTarget').addEventListener('click', function () {
+            initAudio();
+            if (!game || !game.target) return;
+            var target = game.target;
+            startPlayback('target', function () {
+              return target;
+            }, CONFIG.targetLoops, null);
+          });
+          byId('checkBtn').addEventListener('click', checkRound);
+          twoStep(byId('revealBtn'), 'btnReveal', 'btnRevealConfirm', revealRound);
+          byId('nextBtn').addEventListener('click', nextRound);
+          twoStep(byId('quitBtn'), 'btnQuit', 'btnQuitConfirm', returnHome, function () {
+            return !game || game.mode === 'free' || game.solved;
+          });
+          twoStep(byId('clearBtn'), 'btnClear', 'btnClearConfirm', function () {
+            if (!game || game.mode !== 'free') return;
+            grid = Core.emptyGrid(trackIds, grid.beats, CONFIG.stepsPerBeat);
+            marks = {};
+            presetId = '';
+            freeDirty = false;
+            byId('presets').value = '';
+            byId('presetAbout').textContent = '';
+            renderCells();
+            renderStrip();
+            saveFreePattern();
+          });
+          byId('tempo').addEventListener('input', function () {
+            if (game && game.mode === 'free') setBpm(this.value);
+          });
+          byId('presets').addEventListener('change', function () {
+            var groove = GROOVES.filter(function (item) {
+              return item.id === this.value;
+            }, this)[0];
+            if (groove) loadGroove(groove);
+          });
+          byId('againBtn').addEventListener('click', function () {
+            if (lastResult) newGame(lastResult.result.mode, lastResult.result.level);
+          });
+          byId('homeBtn').addEventListener('click', returnHome);
+          document.addEventListener('visibilitychange', function () {
+            if (document.hidden) stopPlayback('stop');
+          });
+        }
+
+        window.Game = {
+          on: on,
+          getState: getState,
+          getStats: function () {
+            return clone(stats);
+          },
+          CONFIG: CONFIG,
+          DATA: DATA,
+          Core: Core,
+          runSelfCheck: runSelfCheck,
+          playTone: playTone,
+          showToast: showToast,
+          goTo: goTo,
+          playHit: function (trackId, whenSec) {
+            initAudio();
+            playHit(trackId, whenSec);
+          },
+          getGrid: getGrid,
+          setGrid: setGrid,
+          setBpm: setBpm,
+          play: function () {
+            if (!game || !grid || playback) return;
+            toggleMine();
+          },
+          stop: function () {
+            stopPlayback('stop');
+          },
+          isPlaying: function () {
+            return Boolean(playback);
+          }
+        };
+
+        // เริ่มทำงานเมื่อโหลดหน้า
+        loadAll();
+        applyOptions();
+        applyText();
+        bindControls();
+        renderHowto();
+        renderHome();
+        showStorageNotice();
+        if (new URLSearchParams(location.search).get('selfcheck') === '1') {
+          byId('settings').open = true;
+          showCheck();
+        } else if (!stats.seenHowto) {
+          showScreen('howto');
+        }
+        /* ═══════════ โซน E · ส่วนเสริมของนิสิต (เขียนเพิ่มที่นี่) ═══════════ */
+        /* วิธีใช้โซนนี้: เขียนส่วนเสริมของคุณที่นี่ โดยฟังเหตุการณ์ด้วย Game.on(ชื่อเหตุการณ์, ฟังก์ชัน)
+           และเรียกตัวช่วยของ Game เช่น Game.getGrid, Game.setGrid, Game.setBpm, Game.showToast
+           วางปุ่มหรือข้อความของคุณในช่องว่าง slotHome, slotHud, slotActions, slotPanel, slotResult ได้เลย
+           ห้ามแก้โซน C ถ้าส่วนเสริมพัง เกมจะเล่นต่อได้ และข้อความผิดพลาดจะไปแสดงที่ปุ่ม "ตรวจระบบ" */
+        /* เพิ่มส่วนเสริมที่นี่ */
+        /* ตัวอย่าง (ลบเครื่องหมายคอมเมนต์ออกเพื่อใช้): แสดงข้อความทุกครั้งที่เริ่มต้นจังหวะใหม่ของห้อง
+        Game.on('stepTick', function (detail) {
+          if (detail.isBeatStart && detail.beat === 1) Game.showToast('เริ่มห้องใหม่');
+        });
+        */
+      }());
+    </script>
+  </body>
+</html>
