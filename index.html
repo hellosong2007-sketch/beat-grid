@@ -804,6 +804,7 @@ button:hover {
           <button id="revealBtn" data-t="btnReveal" hidden></button>
           <button id="nextBtn" class="primary" data-t="btnNext" hidden></button>
           <button id="quitBtn" data-t="btnQuit"></button>
+          <button id="metronomeToggle" type="button" aria-pressed="false" title="เปิดหรือปิดเสียงคลิกตามจังหวะ">🔕 Metronome: OFF</button>
           <label class="tempo" id="tempoBox">
             <span id="tempoText"></span>
             <input type="range" id="tempo" />
@@ -1774,6 +1775,7 @@ button:hover {
         var audio = null;
         var master = null;
         var audioFailed = false;
+        var metronomeEnabled = false;
         var stats = null;
         var settings = null;
 
@@ -2739,6 +2741,25 @@ button:hover {
           frameId = requestAnimationFrame(playbackFrame);
         }
 
+        // เสียงคลิกเมโทรนอม: เน้นจังหวะแรกของห้อง
+        function playMetronomeClick(whenSec, accent) {
+          if (!audio || !master || !metronomeEnabled) return;
+          try {
+            var start = audio.currentTime + Math.max(0, whenSec || 0);
+            var osc = audio.createOscillator();
+            var gain = audio.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(accent ? 1320 : 880, start);
+            gain.gain.setValueAtTime(0.0001, start);
+            gain.gain.exponentialRampToValueAtTime(Math.max(0.001, settings.volume / 100 * 0.25), start + 0.003);
+            gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.055);
+            osc.connect(gain);
+            gain.connect(master);
+            osc.start(start);
+            osc.stop(start + 0.065);
+          } catch (e) { /* audio unavailable */ }
+        }
+
         // ทุกเฟรมของการเล่น
         function playbackFrame() {
           if (!playback) return;
@@ -2764,6 +2785,7 @@ button:hover {
           due.forEach(function (n) {
             if (late.length > 1 && timeOf(n) < elapsed && n !== late[late.length - 1]) return;
             var when = Math.max(0, (timeOf(n) - elapsed) / 1000);
+            if (n % CONFIG.stepsPerBeat === 0) playMetronomeClick(when, n % steps === 0);
             Core.hitsAt(current, n % steps).forEach(function (id) {
               playHit(id, when);
             });
@@ -3402,6 +3424,12 @@ button:hover {
             else newGame(mode.id, settings.level);
           });
           byId('playMine').addEventListener('click', toggleMine);
+          byId('metronomeToggle').addEventListener('click', function () {
+            initAudio();
+            metronomeEnabled = !metronomeEnabled;
+            this.textContent = metronomeEnabled ? '🔔 Metronome: ON' : '🔕 Metronome: OFF';
+            this.setAttribute('aria-pressed', String(metronomeEnabled));
+          });
           byId('playTarget').addEventListener('click', function () {
             initAudio();
             if (!game || !game.target) return;
