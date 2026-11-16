@@ -805,6 +805,10 @@ button:hover {
           <button id="nextBtn" class="primary" data-t="btnNext" hidden></button>
           <button id="quitBtn" data-t="btnQuit"></button>
           <button id="metronomeToggle" type="button" aria-pressed="false" title="เปิดหรือปิดเสียงคลิกตามจังหวะ">🔕 Metronome: OFF</button>
+          <label class="tempo" for="metronomeVolume" style="min-width:155px;flex:1 1 155px">
+            <span id="metronomeVolumeText">🔊 เสียง Metronome 80%</span>
+            <input type="range" id="metronomeVolume" min="0" max="100" step="5" value="80" aria-label="ระดับเสียง Metronome" style="width:100%" />
+          </label>
           <label class="tempo" id="tempoBox">
             <span id="tempoText"></span>
             <input type="range" id="tempo" />
@@ -1776,6 +1780,7 @@ button:hover {
         var master = null;
         var audioFailed = false;
         var metronomeEnabled = false;
+        var metronomeVolume = 80; // Independent from the drum volume
         var stats = null;
         var settings = null;
 
@@ -2751,8 +2756,8 @@ button:hover {
             var gain = audio.createGain();
             osc.type = 'square';
             osc.frequency.setValueAtTime(accent ? 1200 : 850, start);
-            var volume = Math.max(0, Math.min(1, settings.volume / 100));
-            var peak = volume * (accent ? 0.24 : 0.17);
+            var volume = Math.max(0, Math.min(1, metronomeVolume / 100));
+            var peak = volume * (accent ? 0.32 : 0.23);
             if (peak <= 0) return;
             gain.gain.setValueAtTime(0.0001, start);
             gain.gain.exponentialRampToValueAtTime(peak, start + 0.002);
@@ -3428,6 +3433,10 @@ button:hover {
             else newGame(mode.id, settings.level);
           });
           byId('playMine').addEventListener('click', toggleMine);
+          byId('metronomeVolume').addEventListener('input', function () {
+            metronomeVolume = Number(this.value);
+            byId('metronomeVolumeText').textContent = '🔊 เสียง Metronome ' + metronomeVolume + '%';
+          });
           byId('metronomeToggle').addEventListener('click', function () {
             initAudio();
             metronomeEnabled = !metronomeEnabled;
