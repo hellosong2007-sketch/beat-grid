@@ -2741,23 +2741,27 @@ button:hover {
           frameId = requestAnimationFrame(playbackFrame);
         }
 
-        // เสียงคลิกเมโทรนอม: เน้นจังหวะแรกของห้อง
-        function playMetronomeClick(whenSec, accent) {
-          if (!audio || !master || !metronomeEnabled) return;
+        // Metronome: audible even when the drum pattern is empty.
+        // Connect directly to the output, since the drum master is intentionally quiet.
+        function playMetronomeClick(whenSec, accent, preview) {
+          if (!audio || (!metronomeEnabled && !preview)) return;
           try {
             var start = audio.currentTime + Math.max(0, whenSec || 0);
             var osc = audio.createOscillator();
             var gain = audio.createGain();
-            osc.type = "sine";
-            osc.frequency.setValueAtTime(accent ? 1320 : 880, start);
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(accent ? 1200 : 850, start);
+            var volume = Math.max(0, Math.min(1, settings.volume / 100));
+            var peak = volume * (accent ? 0.24 : 0.17);
+            if (peak <= 0) return;
             gain.gain.setValueAtTime(0.0001, start);
-            gain.gain.exponentialRampToValueAtTime(Math.max(0.001, settings.volume / 100 * 0.25), start + 0.003);
-            gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.055);
+            gain.gain.exponentialRampToValueAtTime(peak, start + 0.002);
+            gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.045);
             osc.connect(gain);
-            gain.connect(master);
+            gain.connect(audio.destination);
             osc.start(start);
-            osc.stop(start + 0.065);
-          } catch (e) { /* audio unavailable */ }
+            osc.stop(start + 0.055);
+          } catch (e) { /* Audio may be unavailable in this browser */ }
         }
 
         // ทุกเฟรมของการเล่น
@@ -3429,6 +3433,14 @@ button:hover {
             metronomeEnabled = !metronomeEnabled;
             this.textContent = metronomeEnabled ? '🔔 Metronome: ON' : '🔕 Metronome: OFF';
             this.setAttribute('aria-pressed', String(metronomeEnabled));
+            // Give an immediate audible confirmation, even before playback starts.
+            if (metronomeEnabled && audio) {
+              if (audio.state === 'suspended' && audio.resume) {
+                audio.resume().then(function () { playMetronomeClick(0, true, true); }).catch(function () {});
+              } else {
+                playMetronomeClick(0, true, true);
+              }
+            }
           });
           byId('playTarget').addEventListener('click', function () {
             initAudio();
